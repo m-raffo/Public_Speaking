@@ -161,15 +161,9 @@ def main():
         # Now, put the transcription responses to use.
         print ("hi")
         for cur_response in responses:
-            #print (cur_response);
-            try:
-                cur_response.results[0].is_final
+            #print (cur_response)
+            if cur_response.results[0].is_final:
                 print (cur_response.results[0].alternatives[0].transcript)
-            except:
-                print ("daddi")
-            print ("br")
-
-
 
 if __name__ == '__main__':
     main()
