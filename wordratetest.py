@@ -159,13 +159,12 @@ def main():
         responses = client.streaming_recognize(streaming_config, requests)
 
         # Now, put the transcription responses to use.
+        print ("hi")
         for cur_response in responses:
             #print (cur_response);
             try:
-                i=cur_response.results
-                print (i)
-                i.is_final()
-                print ("huh")
+                cur_response.results[0].is_final
+                print (cur_response.results[0].alternatives[0].transcript)
             except:
                 print ("daddi")
             print ("br")
