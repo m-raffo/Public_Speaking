@@ -38,6 +38,17 @@ class Window(Frame):
         self.text.config(state=DISABLED)
 
 
+        self.tips = Label(self.labelframe, text="Tips:")
+
+        self.tips.pack(anchor="w")
+
+        self.tipstext = tkinter.Text(self.labelframe, width=1, height = 2, wrap=WORD, bg= TEXTBOX_BG)
+        self.tipstext.pack(fill=tkinter.X, expand=False)
+
+        self.tipstext.insert(END, "Slow down\nGood Volume")
+
+
+
 
 
 
