@@ -1,11 +1,13 @@
 import io
 import os
 
+
 # Imports the Google Cloud client library
+
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
-
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./apicred.json"
 # Instantiates a client
 client = speech.SpeechClient()
 
