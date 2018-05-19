@@ -5,6 +5,15 @@ import tkinter
 WINDOW_BG = "#ffffff"
 TEXTBOX_BG = "#e9e9e9"
 
+DEFAULT_FONT = "Helvetica"
+DEFAULT_FONT_SIZE = 22
+
+# Colors for tips
+COLOR_GOOD = "#15955f" # Green
+COLOR_WARN = "#c9bb00" # Yellow
+COLOR_BAD = "#ab0000" # Red
+
+
 class Window(Frame):
 
 
@@ -24,11 +33,17 @@ class Window(Frame):
         self.root = tkinter.Tk()
         self.root.title("App")
         self.root.geometry("400x400")
+        self.root.config(bg = '#ffffff')
         self.root.update()
-        self.text = tkinter.Text(self.root, width=1, height=1, wrap=WORD, bg= TEXTBOX_BG)
-        self.text.pack(fill=tkinter.BOTH,side=tkinter.LEFT, expand=True)
-        self.labelframe = LabelFrame(self.root, text="Info", width=1, height= 1)
+        self.text = tkinter.Text(self.root, width=100, wrap=WORD, bg= '#ffffff')
+        self.text.pack(fill='y', side=tkinter.LEFT, expand=True)
+        # self.text.pack(fill=tkinter.BOTH,side=tkinter.LEFT, expand=True)
+        # self.labelframe = LabelFrame(self.root, text="", width=1, height= 1, bg= TEXTBOX_BG)
+
+
+        self.labelframe = LabelFrame(self.root, text="", width=10000, height= 1, bg= TEXTBOX_BG)
         # self.box2Text = tkinter.Text(self.root, width=1, height=1)
+        # self.labelframe.pack(fill=tkinter.BOTH,side=tkinter.RIGHT, expand=True)
         self.labelframe.pack(fill=tkinter.BOTH,side=tkinter.RIGHT, expand=True)
 
         self.text.insert(END, '''Lorem ipsum de arbitrantur. Enim id ad quem offendit, ea quid quid quis excepteur eu cupidatat fugiat arbitror, qui nostrud distinguantur, nescius si labore ad id export dolore est nescius, hic ita quae doctrina est possumus id nostrud. Te appellat qui mentitum, eu velit constias.Quis consequat ab summis anim e veniam e excepteur. Anim ut nostrud ea summis, duis laborum eu vidisse. Admodum graviterque te ingeniis.
@@ -38,14 +53,32 @@ class Window(Frame):
         self.text.config(state=DISABLED)
 
 
-        self.tips = Label(self.labelframe, text="Tips:")
+        self.tips = Label(self.labelframe, text="Tips:", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE-2), bg=TEXTBOX_BG)
 
         self.tips.pack(anchor="w")
 
-        self.tipstext = tkinter.Text(self.labelframe, width=1, height = 2, wrap=WORD, bg= TEXTBOX_BG)
-        self.tipstext.pack(fill=tkinter.X, expand=False)
+        # Tips in a textbox
 
-        self.tipstext.insert(END, "Slow down\nGood Volume")
+        # self.tipstext = tkinter.Text(self.labelframe, width=1, height = 2, wrap=WORD, bg= TEXTBOX_BG)
+        # self.tipstext.pack(fill=tkinter.X, expand=False)
+        #
+        # self.tipstext.insert(END, "Slow down\nGood Volume")
+
+        # ------------------------------------------------------
+
+        # Tips as a label
+
+        self.labelframe_tips = Frame(self.labelframe, width=1, height= 1, bg = WINDOW_BG)
+        self.labelframe_tips.pack(fill=tkinter.X, expand=False , padx = 10)
+
+        self.volume_tip = Label(self.labelframe_tips, text= "Good Volume", fg=COLOR_GOOD, font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = WINDOW_BG)
+
+
+        self.speed_tip = Label(self.labelframe_tips, text= "Slow down a bit", fg=COLOR_WARN, font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = WINDOW_BG)
+
+
+        self.volume_tip.pack(fill=tkinter.X, expand=False)
+        self.speed_tip.pack(fill=tkinter.X, expand=False)
 
 
 
