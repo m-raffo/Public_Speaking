@@ -32,10 +32,10 @@ class Window(Frame):
 
         self.root = tkinter.Tk()
         self.root.title("App")
-        self.root.geometry("400x400")
+        self.root.geometry("1000x500")
         self.root.config(bg = '#ffffff')
         self.root.update()
-        self.text = tkinter.Text(self.root, width=100, wrap=WORD, bg= '#ffffff')
+        self.text = tkinter.Text(self.root, width=75, wrap=WORD, bg= '#ffffff')
         self.text.pack(fill='y', side=tkinter.LEFT, expand=True)
         # self.text.pack(fill=tkinter.BOTH,side=tkinter.LEFT, expand=True)
         # self.labelframe = LabelFrame(self.root, text="", width=1, height= 1, bg= TEXTBOX_BG)
@@ -79,6 +79,26 @@ class Window(Frame):
 
         self.volume_tip.pack(fill=tkinter.X, expand=False)
         self.speed_tip.pack(fill=tkinter.X, expand=False)
+
+
+        # Adding the charts for pace
+        self.labelframe_pacechart = Frame(self.labelframe, width=1, height= 1, bg = TEXTBOX_BG)
+        self.labelframe_pacechart.pack(fill=tkinter.X, expand=False , padx = 10, pady = 50)
+
+        self.pace_value_label = Label(self.labelframe_pacechart, text= "Pace:", fg="black", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = TEXTBOX_BG)
+        self.pace_value = Label(self.labelframe_pacechart, text= "25 wpm", fg="black", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = TEXTBOX_BG)
+
+
+
+
+        self.pace_value.pack(fill=tkinter.X, expand=False, side = RIGHT)
+        self.pace_value_label.pack(fill=tkinter.X, expand=False, side = LEFT)
+
+
+        # self.bind("<Configure>", self.on_resize)
+
+    def on_resize(self,event):
+        print(event.width())
 
 
 
