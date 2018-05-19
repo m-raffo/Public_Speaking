@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter
 from PIL import ImageTk, Image
+from tkinter.font import Font
 
 
 WINDOW_BG = "#ffffff"
@@ -24,6 +25,8 @@ imagepath = 'sample chart.png'
 class Window(Frame):
 
 
+
+
     def __init__(self, master=None):
         # Frame.__init__(self, master)
         # self.master = master
@@ -42,26 +45,49 @@ class Window(Frame):
         self.root.geometry("1000x500")
         self.root.config(bg = '#ffffff')
         self.root.update()
+
+
+        self.speechtext = Frame(self.root)
+
+
         self.labelframe = LabelFrame(self.root, text="", width=700, height= 1, bg= TEXTBOX_BG)
         # self.box2Text = tkinter.Text(self.root, width=1, height=1)
         # self.labelframe.pack(fill=tkinter.BOTH,side=tkinter.RIGHT, expand=True)
         self.labelframe.pack(fill=tkinter.Y, side=tkinter.RIGHT, expand=False)
 
 
-        self.text = tkinter.Text(self.root, wrap=WORD, bg= '#ffffff', font=(DEFAULT_FONT, DEFAULT_FONT_SIZE), fg = "#777777")
+        # Bold font
+        self.bold_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="bold")
+
+
+
+
+        text = Text(self.speechtext, wrap=WORD, bg= '#ffffff', font=(DEFAULT_FONT, DEFAULT_FONT_SIZE), fg = "#4f4f4f")
+
+
+        text.pack(fill= BOTH)
+        text.tag_configure("BOLD", font=self.bold_font, foreground='#000000')
+        text.insert(END, '''HI WORLD''')
+        text.tag_add("BOLD", '1.2', '1.5')
+        # widget_width = 0
+        # widget_height = float(text.index(END))
+        # for line in text.get("1.0", END).split("\n"):
+        #    if len(line) > widget_width:
+        #       widget_width = len(line)+1
+        # text.config(width=widget_width, height=widget_height)
         # self.text.pack(fill=BOTH, side=tkinter.LEFT)
-        self.text.pack(fill=BOTH)
+        self.speechtext.pack(fill=BOTH)
         # self.text.pack(fill=tkinter.BOTH,side=tkinter.LEFT, expand=True)
         # self.labelframe = LabelFrame(self.root, text="", width=1, height= 1, bg= TEXTBOX_BG)
 
 
 
 
-        self.text.insert(END, '''Lorem ipsum de arbitrantur. Enim id ad quem offendit, ea quid quid quis excepteur eu cupidatat fugiat arbitror, qui nostrud distinguantur, nescius si labore ad id export dolore est nescius, hic ita quae doctrina est possumus id nostrud. Te appellat qui mentitum, eu velit constias.Quis consequat ab summis anim e veniam e excepteur. Anim ut nostrud ea summis, duis laborum eu vidisse. Admodum graviterque te ingeniis.
+        # self.text.insert(END, '''Lorem ipsum de arbitrantur. Enim id ad quem offendit, ea quid quid quis excepteur eu cupidatat fugiat arbitror, qui nostrud distinguantur, nescius si labore ad id export dolore est nescius, hic ita quae doctrina est possumus id nostrud. Te appellat qui mentitum, eu velit constias.Quis consequat ab summis anim e veniam e excepteur. Anim ut nostrud ea summis, duis laborum eu vidisse. Admodum graviterque te ingeniis.
         #
         # Consequat eram quid se quae, aut se tamen elit quem. Illum excepteur aut aliqua dolore, quorum doctrina nam coniunctione ad a malis cernantur, a quorum vidisseconiunctione a fugiat ut probant ex sunt ad se magna hic ipsum, nulla admodum anvoluptate ad amet quo incurreret. Do aute a dolor ne tempor quamquam nonsempiternum ubi ullamco efflorescere id commodo, ea quid irure et consequat, iisdo malis eram enim, cillum nescius voluptate, qui quem arbitror mandaremus nam osunt sint hic incurreret. Summis eiusmod coniunctione.Iis sunt offendit hic nenoster multos summis laborum do vidisse duis elit si quis in oe instituendarum.Quorum cohaerescant quibusdam nisi deserunt, anim admodum occaecat. Illumofficia ita amet cillum, ut quis praesentibus, iudicem summis ita proidentrelinqueret ea constias exercitation ut mentitum, ne fore officia quo voluptatene commodo est tamen iudicem qui distinguantur se te magna deserunt praetermissum.''')
 
-        self.text.config(state=DISABLED)
+        # self.text.config(state=DISABLED)
 
 
         self.tips = Label(self.labelframe, text="Tips:", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE-2), bg=TEXTBOX_BG)
