@@ -120,8 +120,9 @@ def listen_print_loop(responses):
         # some extra spaces to overwrite the previous result
         overwrite_chars = ' ' * (num_chars_printed - len(transcript))
 
-        if not result.is_final:
+        if False:
             sys.stdout.write(transcript + overwrite_chars + '\r')
+            sys.stdout.flush()
 
             num_chars_printed = len(transcript)
 
@@ -133,7 +134,6 @@ def listen_print_loop(responses):
             if re.search(r'\b(exit|quit)\b', transcript, re.I):
                 print('Exiting..')
                 break
-
             num_chars_printed = 0
 
 
@@ -159,7 +159,17 @@ def main():
         responses = client.streaming_recognize(streaming_config, requests)
 
         # Now, put the transcription responses to use.
-        listen_print_loop(responses)
+        for cur_response in responses:
+            #print (cur_response);
+            try:
+                i=cur_response.results
+                print (i)
+                i.is_final()
+                print ("huh")
+            except:
+                print ("daddi")
+            print ("br")
+
 
 
 if __name__ == '__main__':
