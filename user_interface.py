@@ -19,27 +19,10 @@ COLOR_BAD = "#ab0000" # Red
 
 # Image
 imagepath = 'sample chart.png'
-# icon = ImageTk.PhotoImage(Image.open(imagepath))
 
 
 class Window(Frame):
-
-
-
-
     def __init__(self, master=None):
-        # Frame.__init__(self, master)
-        # self.master = master
-        # self.init_window()
-        #
-        # self.config(bg=WINDOW_BG)
-        #
-        # self.root.update()
-        # self.box1Text = tkinter.Text(self.root, width=1, height=1)
-        # self.box1Text.pack(fill=tkinter.BOTH,side=tkinter.LEFT, expand=True)
-        # self.box2Text = tkinter.Text(self.root, width=1, height=1)
-        # self.box2Text.pack(fill=tkinter.BOTH,side=tkinter.RIGHT, expand=True)
-
         self.root = master
         self.root.title("App")
         self.root.geometry("1000x500")
@@ -51,8 +34,6 @@ class Window(Frame):
 
 
         self.labelframe = LabelFrame(self.root, text="", width=700, height= 1, bg= TEXTBOX_BG)
-        # self.box2Text = tkinter.Text(self.root, width=1, height=1)
-        # self.labelframe.pack(fill=tkinter.BOTH,side=tkinter.RIGHT, expand=True)
         self.labelframe.pack(fill=tkinter.Y, side=tkinter.RIGHT, expand=False)
 
 
@@ -69,23 +50,14 @@ class Window(Frame):
         text.tag_configure("BOLD", font=self.bold_font, foreground='#000000')
         text.insert(END, '''HI WORLD''')
         text.tag_add("BOLD", '1.2', '1.5')
-        # widget_width = 0
-        # widget_height = float(text.index(END))
-        # for line in text.get("1.0", END).split("\n"):
-        #    if len(line) > widget_width:
-        #       widget_width = len(line)+1
-        # text.config(width=widget_width, height=widget_height)
-        # self.text.pack(fill=BOTH, side=tkinter.LEFT)
+
         self.speechtext.pack(fill=BOTH)
-        # self.text.pack(fill=tkinter.BOTH,side=tkinter.LEFT, expand=True)
-        # self.labelframe = LabelFrame(self.root, text="", width=1, height= 1, bg= TEXTBOX_BG)
 
 
 
 
-        # self.text.insert(END, '''Lorem ipsum de arbitrantur. Enim id ad quem offendit, ea quid quid quis excepteur eu cupidatat fugiat arbitror, qui nostrud distinguantur, nescius si labore ad id export dolore est nescius, hic ita quae doctrina est possumus id nostrud. Te appellat qui mentitum, eu velit constias.Quis consequat ab summis anim e veniam e excepteur. Anim ut nostrud ea summis, duis laborum eu vidisse. Admodum graviterque te ingeniis.
-        #
-        # Consequat eram quid se quae, aut se tamen elit quem. Illum excepteur aut aliqua dolore, quorum doctrina nam coniunctione ad a malis cernantur, a quorum vidisseconiunctione a fugiat ut probant ex sunt ad se magna hic ipsum, nulla admodum anvoluptate ad amet quo incurreret. Do aute a dolor ne tempor quamquam nonsempiternum ubi ullamco efflorescere id commodo, ea quid irure et consequat, iisdo malis eram enim, cillum nescius voluptate, qui quem arbitror mandaremus nam osunt sint hic incurreret. Summis eiusmod coniunctione.Iis sunt offendit hic nenoster multos summis laborum do vidisse duis elit si quis in oe instituendarum.Quorum cohaerescant quibusdam nisi deserunt, anim admodum occaecat. Illumofficia ita amet cillum, ut quis praesentibus, iudicem summis ita proidentrelinqueret ea constias exercitation ut mentitum, ne fore officia quo voluptatene commodo est tamen iudicem qui distinguantur se te magna deserunt praetermissum.''')
+
+        # self.text.insert(END, '''Text here''')
 
         # self.text.config(state=DISABLED)
 
@@ -177,64 +149,10 @@ class Window(Frame):
         self.labelframe_volumechart.pack(fill=tkinter.X, expand=False , padx = 0, pady = 0)
 
 
-        # self.bind("<Configure>", self.on_resize)
 
-    def on_resize(self,event):
-        print(event.width())
-
-
-
-
-
-
-    # #Creation of init_window
-    # def init_window(self):
-    #
-    #
-    #
-    #     # changing the title of our master widget
-    #     self.master.title("GUI")
-    #
-    #     # allowing the widget to take the full space of the root window
-    #     self.pack(fill=BOTH, expand=1)
-    #
-    #     # creating a button instance
-    #
-    #     # text = Text(self, wrap=WORD, bg= TEXTBOX_BG, width=1, height= 1)
-    #     # text = Text(self, wrap=WORD, bg= TEXTBOX_BG)
-    #     #
-    #     # # text = tkinter.Text(self.root, width=1, height=1)
-    #     # text.pack(fill=BOTH,side=tkinter.RIGHT, expand=1)
-    #     # # self.box2Text = tkinter.Text(self.root, width=1, height=1)
-    #     # # self.box2Text.pack(fill=tkinter.BOTH,side=tkinter.RIGHT, expand=True)
-    #     #
-    #     # text.place(x=0, y=0)
-    #     #
-    #     # text.insert(END, '''Lorem ipsum de arbitrantur. Enim id ad quem offendit, ea quid quid quis excepteur eu cupidatat fugiat arbitror, qui nostrud distinguantur, nescius si labore ad id export dolore est nescius, hic ita quae doctrina est possumus id nostrud. Te appellat qui mentitum, eu velit constias.Quis consequat ab summis anim e veniam e excepteur. Anim ut nostrud ea summis, duis laborum eu vidisse. Admodum graviterque te ingeniis.
-    #     #
-    #     # Consequat eram quid se quae, aut se tamen elit quem. Illum excepteur aut aliqua dolore, quorum doctrina nam coniunctione ad a malis cernantur, a quorum vidisseconiunctione a fugiat ut probant ex sunt ad se magna hic ipsum, nulla admodum anvoluptate ad amet quo incurreret. Do aute a dolor ne tempor quamquam nonsempiternum ubi ullamco efflorescere id commodo, ea quid irure et consequat, iisdo malis eram enim, cillum nescius voluptate, qui quem arbitror mandaremus nam osunt sint hic incurreret. Summis eiusmod coniunctione.Iis sunt offendit hic nenoster multos summis laborum do vidisse duis elit si quis in oe instituendarum.Quorum cohaerescant quibusdam nisi deserunt, anim admodum occaecat. Illumofficia ita amet cillum, ut quis praesentibus, iudicem summis ita proidentrelinqueret ea constias exercitation ut mentitum, ne fore officia quo voluptatene commodo est tamen iudicem qui distinguantur se te magna deserunt praetermissum.''')
-    #     #
-    #     #
-    #     #
-    #     # # text.delete(0, END)
-    #     # # text.insert(0, "a default value")
-    #     #
-    #     # text.config(state=DISABLED)
-    #
-    #     # placing the button on my window
-    #
-    # def client_exit(self):
-    #     exit()
 
 root = Tk()
-# root = Toplevel()
 
-#
-# #size of the window
-#
-# width = root.winfo_screenwidth()
-# height = root.winfo_screenheight()
-# root.geometry('8000x600')
 
 
 app = Window(root)
