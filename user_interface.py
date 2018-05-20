@@ -7,6 +7,7 @@ import os
 from random import randint
 import plot
 import _thread
+from time import sleep
 
 from backend import realtime_interpreter
 
@@ -277,7 +278,10 @@ root = Tk()
 def task():
     # Run the backend code
     print("Running main now...")
-    realtime_interpreter.main()
+    while True:
+        _thread.start_new_thread(realtime_interpreter.main, ())
+        sleep(65)
+        print("Starting now...")
 
 
 app = Window(root)

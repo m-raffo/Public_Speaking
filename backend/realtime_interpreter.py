@@ -256,9 +256,9 @@ def main():
         # Now, put the transcription responses to use.
         print ("Init.")
         print("NO")
-        with open("./script.txt", "r") as text_file:
-            sriptv = text_file.readlines()
-            print(sriptv)
+        # with open("./script.txt", "r") as text_file:
+        #     sriptv = text_file.readlines()
+        #     print(sriptv)
 
         print("daddi")
 
@@ -280,7 +280,7 @@ def main():
             except:
                 print ("error: likely recieved and empty input")
 
-            print("\n")
+            print(wpm_currentr)
             transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
             #print(transcript_full+transcript_pending)
 if __name__ == '__main__':
