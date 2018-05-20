@@ -5,10 +5,11 @@ from PIL import ImageTk, Image
 from tkinter.font import Font
 import os
 from random import randint
+import plot
 
 
-os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
-os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
+# os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
+# os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
 
 
 WINDOW_BG = "#ffffff"
@@ -34,13 +35,18 @@ class Window(Frame):
         self.past_wpm.append(wpm)
         self.past_volume.append(volume)
 
-        past_wpm_str = []
-        for i in self.past_wpm:
-            past_wpm_str.append(str(i))
+        # past_wpm_str = []
+        # for i in self.past_wpm:
+        #     past_wpm_str.append(str(i))
 
-        print("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
-        os.system("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
-        os.system("python3 plot.py 0 150 300 {} rect2.png 140".format(str.join(',',past_wpm_str)))
+        # print("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
+        # os.system("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
+
+        plot.save_plot(self.past_wpm[-10:-1], 'rect1.png', 150, 0, 300)
+        plot.save_plot(self.past_wpm, 'rect2.png', 150, 0, 300)
+
+
+        # os.system("python3 plot.py 0 150 300 {} rect2.png 140".format(str.join(',',past_wpm_str)))
 
 
         print("Done computing...")
@@ -192,8 +198,8 @@ class Window(Frame):
 
 
 
-        os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
-        os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
+        # os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
+        # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
 
 
 
