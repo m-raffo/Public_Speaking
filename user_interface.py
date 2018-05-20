@@ -71,8 +71,8 @@ class Window(Frame):
         # print("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
         # os.system("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
 
-        plot.save_plot(self.past_wpm[-10:-1], 'rect1.png', 150, 0, 300)
-        plot.save_plot(self.past_wpm, 'rect2.png', 150, 0, 300)
+        plot.save_plot(self.past_wpm[-10:-1], 'rect1.png', 10, 0, 20)
+        plot.save_plot(self.past_wpm, 'rect2.png', 5, 0, 10)
 
         # self.scrollb.set(.1, 0.8)
         self.text.yview_moveto(0.5)
@@ -128,7 +128,7 @@ class Window(Frame):
         self.labelframe = LabelFrame(self.root, text="", width=700, height= 1, bg= TEXTBOX_BG)
         self.labelframe.pack(fill=tkinter.Y, side=tkinter.RIGHT, expand=False)
 
-        self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,realtime_interpreter.get_wpm(),randint(0,150)))
+        self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,realtime_interpreter.get_wpm(),randint(1,5)))
         self.dostuff.pack()
 
         # Bold font

@@ -280,7 +280,7 @@ def main():
             except:
                 print ("error: likely recieved and empty input")
 
-            print(wpm_currentr)
+            print(wpm_current)
             transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
             #print(transcript_full+transcript_pending)
 if __name__ == '__main__':
