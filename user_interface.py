@@ -3,7 +3,10 @@ import tkinter
 from PIL import ImageTk, Image
 from tkinter.font import Font
 import os
-os.system("python3 plot.py")
+
+
+os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
+os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
 
 
 WINDOW_BG = "#ffffff"
@@ -114,7 +117,8 @@ class Window(Frame):
         self.labelframe_pacechart = Frame(self.labelframe, width=1, height= 1, bg = TEXTBOX_BG)
 
 
-        self.photo = ImageTk.PhotoImage(Image.open('sample chart.png'))
+        # self.photo = ImageTk.PhotoImage(Image.open('sample chart.png'))
+        self.photo = ImageTk.PhotoImage(Image.open('rect1.png'))
         self.Artwork = Label(self.labelframe_pacechart, image=self.photo)
         self.Artwork.photo = self.photo
         self.Artwork.pack()
@@ -143,7 +147,7 @@ class Window(Frame):
         self.labelframe_volumechart = Frame(self.labelframe, width=1, height= 1, bg = TEXTBOX_BG)
 
 
-        self.photo1 = ImageTk.PhotoImage(Image.open('sample chart.png'))
+        self.photo1 = ImageTk.PhotoImage(Image.open('rect2.png'))
         self.Artwork1 = Label(self.labelframe_volumechart, image=self.photo1)
         self.Artwork1.photo = self.photo1
         self.Artwork1.pack()
