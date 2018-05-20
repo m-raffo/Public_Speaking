@@ -8,6 +8,8 @@ from random import randint
 import plot
 
 
+
+
 # os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
 # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
 
@@ -22,6 +24,28 @@ DEFAULT_FONT_SIZE = 22
 COLOR_GOOD = "#15955f" # Green
 COLOR_WARN = "#c9bb00" # Yellow
 COLOR_BAD = "#ab0000" # Red
+
+speech = '''In ullamco praesentibus.
+
+Quorum voluptate appellat hic de tamen quamquam laboris, litteris labore illum  aut tamen o a enim mandaremus singulis. Quo eiusmod non cupidatat, an aliqua  domesticarum o probant te vidisse si nescius cillum fugiat laborum ipsum et eu iis firmissimum, quid consequat an distinguantur, quis te e legam aliquip et pariatur in offendit. Sint est si veniam quamquam.
+
+Do illum proident concursionibus ad fore fabulas iis appellat. Est dolore appellat distinguantur, se ne arbitrantur, fabulas irure ullamco arbitror, mandaremus ne arbitror non nostrud si quorum, est dolore deserunt expetendis, veniam ad consequat si summis et export senserit si litteris.
+
+Veniam sed probant iis noster in fabulas duis magna nostrud anim non singulis elit malis est multos aut id malis cernantur tractavissent, dolore comprehenderit laborum elit offendit, qui sint nescius proident, quamquam quo dolore admodum, officia illum te probant fidelissimae.'''
+
+
+speech_by_paragraph_raw = speech.split('\n')
+speech_by_paragraph = []
+for i in speech_by_paragraph_raw:
+    if i != '\n' and i != '':
+        speech_by_paragraph.append(i.split(' '))
+
+
+
+
+
+
+
 
 
 
@@ -59,6 +83,25 @@ class Window(Frame):
         self.Artwork1.configure(image=img2)
         self.Artwork1.image = img2
 
+    def get_index_by_word_number(self,speech, word_count):
+        current_found = 0
+        count = 0
+        for i in speech_by_paragraph:
+            count += 1
+            if len(i) + current_found  > word_count:
+                return count, word_count - current_found
+            else:
+                current_found += len(i)
+
+
+    def bold_by_word_number(self, word_count):
+        line_count, word_count = self.get_index_by_word_number(speech, word_count)
+        print(line_count, word_count)
+        line_count = line_count * 2 -1
+        self.text.tag_add("BOLD", '{0}.{1}'.format(line_count, word_count), '{0}.{1}'.format(line_count, word_count+3))
+        self.text.tag_add("BOLD", '2.3', '2.8')
+
+
     def __init__(self, master=None):
         self.root = master
         self.root.title("App")
@@ -82,13 +125,19 @@ class Window(Frame):
 
 
 
-        text = Text(self.speechtext, wrap=WORD, bg= '#ffffff', font=(DEFAULT_FONT, DEFAULT_FONT_SIZE), fg = "#4f4f4f")
+        self.text = Text(self.speechtext, wrap=WORD, bg= '#ffffff', font=(DEFAULT_FONT, DEFAULT_FONT_SIZE), fg = "#4f4f4f")
+
+        self.text.config(state=DISABLED)
 
 
-        text.pack(fill= BOTH)
-        text.tag_configure("BOLD", font=self.bold_font, foreground='#000000')
-        text.insert(END, '''HI WORLD''')
-        text.tag_add("BOLD", '1.2', '1.5')
+
+        self.text.pack(fill= BOTH)
+        self.text.tag_configure("BOLD", font=self.bold_font, foreground='#000000')
+        self.text.configure(state='normal')
+        self.text.insert(END, speech)
+        self.text.config(state=DISABLED)
+        self.text.tag_add("BOLD", '1.2', '1.5')
+        # self.text.tag_add("BOLD", '2.3', '2.8')
 
         self.speechtext.pack(fill=BOTH)
 
@@ -202,7 +251,7 @@ class Window(Frame):
         # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
 
 
-
+        self.bold_by_word_number(5)
 
 
 

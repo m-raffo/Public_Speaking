@@ -129,5 +129,5 @@ def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
     print(last_y)
     draw.line((0,last_y,img.width, last_y), fill='#1a1a1a')
     # plot(0,xnew[-1], wpm[-1], wpm[-1], 0, max(xnew), 0, max(power_smooth), "#000000", )
-    img = img.resize((495, 200), Image.ANTIALIAS)
+    img = img.resize((495, 150), Image.ANTIALIAS)
     img.save(path)
