@@ -228,12 +228,13 @@ def main():
                 if cur_response.results[0].is_final:
                     transcript_corrections = []
                     process_chunk(cur_text)
+                    gen_corrections(False, cur_text)
                     transcript_full += apply_corrections(cur_text, transcript_corrections)
                     transcript_corrections = []
                     #transcript_full+=str(cur_text)
                 else:
                     #autocorrect based on script
-
+                    gen_corrections(True, cur_text)
                     transcript_pending = cur_text
 
             except:
@@ -241,7 +242,7 @@ def main():
 
             print("\n")
             transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
-            #print(transcript_full+transcript_pending)
+            print(transcript_full+transcript_pending)
 if __name__ == '__main__':
     main()
 

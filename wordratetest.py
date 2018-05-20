@@ -11,11 +11,12 @@ from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./apicred.json"
+transcript_full = ""
+transcript_pending = ""
 # Instantiates a client
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
-
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
@@ -83,7 +84,7 @@ class MicrophoneStream(object):
 # [END audio_stream]
 
 
-def listen_print_loop(responses):
+def listen_print_loop(responses): #unused
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -138,6 +139,7 @@ def listen_print_loop(responses):
 
 
 def main():
+    global transcript_full, transcript_pending
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
@@ -159,12 +161,32 @@ def main():
         responses = client.streaming_recognize(streaming_config, requests)
 
         # Now, put the transcription responses to use.
-        print ("hi")
+        print ("Init.")
+        expected_word = "gus"
         for cur_response in responses:
-            #print (cur_response)
-            if cur_response.results[0].is_final:
-                print (cur_response.results[0].alternatives[0].transcript)
+            try:
+                cur_text = str(cur_response.results[0].alternatives[0].transcript)
+                if cur_response.results[0].is_final:
+                    transcript_full+=str(cur_text)
+                else:
+                    if len(cur_response.results) > 1:
+                        print (len(cur_response.results))
+                    #autocorrect based on script
+                    for cur_result in cur_response.results:
+                        found_correction=False
+                        words = cur_text.split(' ')
+                        print (words)
+                        if (words[-1]==expected_word):
+                            found_correction=True
+                            print("CORRECTED GOOD SASJADKJ")
 
+                        #if found_correction:
+                            #To do lol
+            except:
+                print ("error: likely recieved and empty input")
+
+            print("\n")
+            print(transcript_full+transcript_pending)
 if __name__ == '__main__':
     main()
 
