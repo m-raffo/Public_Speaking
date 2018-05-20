@@ -109,7 +109,8 @@ class Window(Frame):
 
 
         # Update by word number
-        self.bold_by_word_number(realtime_interpreter.get_word_number())
+        # print("hi"+str(realtime_interpreter.get_word_number()))
+        # self.bold_by_word_number(realtime_interpreter.get_word_number())
         # self.text.yview_moveto(0.5)
 
 
