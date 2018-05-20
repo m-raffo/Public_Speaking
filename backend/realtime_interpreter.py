@@ -362,7 +362,7 @@ def main():
                 #print("\n")
                 transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
                 wordno_store = current_word_number + current_word_number_temporary_offset/3
-                print (wordno_store)
+                #print (wordno_store)
                 #print(transcript_full+transcript_pending)
     except KeyboardInterrupt:
         print ("\n bye felsha")

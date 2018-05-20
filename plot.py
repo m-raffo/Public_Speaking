@@ -47,11 +47,12 @@ def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
     def scale(min, max, newmin, newmax,  value):
         global last_y
         if False:
-            print ('-'*5)
-            print ("Scaling: {}".format(value))
-            print ('In between {0} and {1}'.format(min, max))
-            print ('To between {0} and {1}'.format(newmin, newmax))
-            print ('Answer {}'.format(((float(value) - float(min)) / (float(max) - float(min))) * (float(newmax) - float(newmin)) + float(newmin)))
+            pass
+            #print ('-'*5)
+            #print ("Scaling: {}".format(value))
+            #print ('In between {0} and {1}'.format(min, max))
+            #print ('To between {0} and {1}'.format(newmin, newmax))
+            #print ('Answer {}'.format(((float(value) - float(min)) / (float(max) - float(min))) * (float(newmax) - float(newmin)) + float(newmin)))
         return ((float(value) - float(min)) / (float(max) - float(min))) * (float(newmax) - float(newmin)) + float(newmin)
 
     def plot(x1, y1, x2, y2, minofgraphx, maxofgraphx, minofgraphy, maxofgraphy, color = "#000000"):
@@ -93,7 +94,7 @@ def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
     power_smooth = spline(x,wpm,xnew)
 
     # print(power_smooth)
-    print ("SEttings: {}".format(wpm_settings))
+    #print ("SEttings: {}".format(wpm_settings))
 
     for x1, x2, y1,y2 in zip(xnew, xnew[1:], power_smooth, power_smooth[1:]):
 
@@ -143,9 +144,9 @@ def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
     draw.rectangle((0, settings[3], 20, settings[4]), fill='#c9cf00')
     draw.rectangle((0, settings[4], 20, settings[5]), fill='#ff0000')
 
-    print(last_y)
+    #print(last_y)
 
-    draw.line([(0,last_y),(img.width, last_y)], fill='#1a1a1a')
+    #draw.line([(0,last_y),(img.width, last_y)], fill='#1a1a1a')
     # plot(0,xnew[-1], wpm[-1], wpm[-1], 0, max(xnew), 0, max(power_smooth), "#000000", )
     img = img.resize((495, 150), Image.ANTIALIAS)
     img.save(path)

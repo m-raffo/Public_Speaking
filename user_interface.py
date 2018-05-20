@@ -13,10 +13,13 @@ from backend import realtime_interpreter
 # os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
 # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
 
+badglob = "0.0"
+bagblobooler = False
 
 WINDOW_BG = "#ffffff"
 TEXTBOX_BG = "#e9e9e9"
 
+#DEFAULT_FONT = "OpenDyslexic"
 DEFAULT_FONT = "Helvetica"
 DEFAULT_FONT_SIZE = 22
 
@@ -29,19 +32,14 @@ COLOR_BAD = "#ab0000" # Red
 
 MINWPM = 0
 
-MAXWPM = 200
+MAXWPM = 300 #fast/minute
 
 
 
-speech = '''In ullamco praesentibus.
+with open("./script.txt", "r") as text_file:
+    speech = str.join('\n',text_file.readlines())
 
-Quorum voluptate appellat hic de tamen quamquam laboris, litteris labore illum  aut tamen o a enim mandaremus singulis. Quo eiusmod non cupidatat, an aliqua  domesticarum o probant te vidisse si nescius cillum fugiat laborum ipsum et eu iis firmissimum, quid consequat an distinguantur, quis te e legam aliquip et pariatur in offendit. Sint est si veniam quamquam.
-
-Do illum proident concursionibus ad fore fabulas iis appellat. Est dolore appellat distinguantur, se ne arbitrantur, fabulas irure ullamco arbitror, mandaremus ne arbitror non nostrud si quorum, est dolore deserunt expetendis, veniam ad consequat si summis et export senserit si litteris.
-
-Veniam sed probant iis noster in fabulas duis magna nostrud anim non singulis elit malis est multos aut id malis cernantur tractavissent, dolore comprehenderit laborum elit offendit, qui sint nescius proident, quamquam quo dolore admodum, officia illum te probant fidelissimae.
-
-''' * 6
+# * 6
 
 
 speech_by_paragraph_raw = speech.split('\n')
@@ -49,12 +47,6 @@ speech_by_paragraph = []
 for i in speech_by_paragraph_raw:
     if i != '\n' and i != '':
         speech_by_paragraph.append(i.split(' '))
-
-
-
-
-
-
 
 def clamp(n, minn, maxn):
     return max(min(maxn, n), minn)
@@ -67,22 +59,47 @@ imagepath = 'sample chart.png'
 
 class Window(Frame):
     def bold_by_word_number(self, word_count):
-        line_count, word_count = self.get_index_by_word_number(speech, word_count)
+        global badglob, bagblobooler
+        '''line_count, word_count = self.get_index_by_word_number(speech, word_count)
         # print(line_count, word_count)
-        line_count = line_count * 2 -1
-        self.text.tag_add("BOLD", '{0}.{1}'.format(line_count, word_count), '{0}.{1}'.format(line_count, word_count+10))
+        line_count = line_count * 2 -1'''
+        ts = speech
+        ts = ts.split(' ')
+        tl = speech
+        tl = tl.split('\n')
+        ts[word_count]
+        j = 0
+        k = 1
+        for i in range(0,word_count):
+            j+=len(ts[i])+1
+            if '\n' in ts[i]:
+                #
+                k+=2
+                j=2
+                #print("NEWLINE")
+        if not bagblobooler:
+            bagblobooler = True
+        else:
+            self.text.tag_remove("0.0", badglob)
+        badglob = str(k)+"."+str(j+10)
+        print (badglob)
+        self.text.tag_add("BOLD", "0.0", str(k)+"."+str(j+10))
+        #self.text.tag_remove("BOLD", str(k)+"."+str(j+5))
 
 
     def update(self, position, wpm, volume):
         # return None
         # print("Current wpm: {}".format(wpm))
-        wpm = clamp(MAXWPM - realtime_interpreter.get_wpm(), MINWPM, MAXWPM)
+        optimalwpmc = (MAXWPM + MINWPM)/2
+        wpm = realtime_interpreter.get_wpm()
+        wpm = (wpm-optimalwpmc)/1.5 + optimalwpmc
+        wpm = clamp(MAXWPM - wpm, MINWPM, MAXWPM)
         # print("Updating...")
         # print("Current wpm (clamped): {}".format(wpm))
         # print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
         self.past_wpm.append(wpm)
         # self.past_volume.append(volume)
-        self.pace_value['text'] = '{} WPM'.format(int(wpm))
+        self.pace_value['text'] = ""#'{} WPM'.format(int(wpm))
 
         self.wpm_average_history.append(float(sum(self.past_wpm[-3:-1]))/len(self.past_wpm[-3:-1]))
         plot.save_plot(self.wpm_average_history[-10:-1], 'rect1.png', MAXWPM/  2.0, MINWPM, MAXWPM)
@@ -91,10 +108,10 @@ class Window(Frame):
         # self.scrollb.set(.1, 0.8)
 
         wpm_settings = plot.get_wpm_settings_outside(MAXWPM / 2.0, MINWPM, MAXWPM)
-        print(wpm_settings)
+        #print(wpm_settings)
 
         if wpm > wpm_settings [0]  and wpm / 2.0 <= wpm_settings [1]:
-            self.speed_tip['text'] = "Speak a lot slower"
+            self.speed_tip['text'] = "Speak faster"
             self.speed_tip.config(fg='#ff0000')
 
 
@@ -122,7 +139,7 @@ class Window(Frame):
             self.speed_tip.config(fg='#ff0000')
 
         else:
-            self.speed_tip['text'] = "Please speak to register your voice"
+            self.speed_tip['text'] = "Please speak at a consistent pace"
             self.speed_tip.config(fg='black')
         # self.text.see(1)
         # print(self.scrollb.get())
@@ -141,7 +158,7 @@ class Window(Frame):
         num_words = realtime_interpreter.get_word_number()
 
         # Update by word number
-        print("hi____"+str(num_words))
+        #print("hi____"+str(num_words))
         self.bold_by_word_number(num_words)
         # self.text.yview_moveto(0.5)
 
@@ -153,7 +170,9 @@ class Window(Frame):
     def get_index_by_word_number(self,speech, word_count):
         current_found = 0
         count = 0
-        for i in speech_by_paragraph:
+        speechtemp = speech;
+        speechtemp.replace('\n',' ')
+        for i in speechtemp:
             count += 1
             if len(i) + current_found  > word_count:
                 return count, word_count - current_found
@@ -204,7 +223,7 @@ class Window(Frame):
         self.text.configure(state='normal')
         self.text.insert(END, speech)
         self.text.config(state=DISABLED)
-        self.text.tag_add("BOLD", '1.2', '1.5')
+        #self.text.tag_add("BOLD", '1.2', '1.5')
         # self.text.tag_add("BOLD", '2.3', '2.8')
 
         self.speechtext.pack(fill=BOTH)
@@ -334,11 +353,13 @@ app = Window(root)
 
 
 def nonstop_update():
-    print("RNNNINGININGINGIN")
+    print("initUI")
+    i = 0
     while True:
+        i+=1
         # print("Updating.........")
         app.update(0,realtime_interpreter.get_wpm(),randint(1,5))
-        sleep(0.2)
+        sleep(0.25)
 
 
 # root.after(2000, task)
