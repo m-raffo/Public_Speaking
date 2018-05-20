@@ -202,7 +202,7 @@ def word_chunky_thingalt():
     # return (realtime_wpm)
 def get_word_number():
     global wordno_store
-    return wordno_store
+    return round(wordno_store)
 
 
 def process_chunk(chunk_text):
@@ -244,7 +244,8 @@ def apply_corrections(uncorrected_string, corrections):
 
 def gen_corrections(only_last, uncorrected_string):
     global transcript_corrections, expected_word, current_word_number_temporary_offset
-    current_word_number_temporary_offset = -1
+    if not only_last:
+        current_word_number_temporary_offset = -1 #-1?
     words = uncorrected_string.split(' ')
     if only_last:
         words_to_check = [len(words)-1]
@@ -253,7 +254,7 @@ def gen_corrections(only_last, uncorrected_string):
 
     for i in words_to_check:
         set_expected_word()
-        current_word_number_temporary_offset +=1
+        #current_word_number_temporary_offset +=1
         found_correction=False #initial value
         #Perform a phonetic comparision
         if (jellyfish.match_rating_comparison(words[i],expected_word)):
@@ -351,6 +352,7 @@ def main():
                         gen_corrections(True, cur_text)
                         word_chunky_thingalt()
                         current_word_number_temporary_offset += 1
+                        #print (current_word_number_temporary_offset)
                         transcript_pending = apply_corrections(cur_text, transcript_corrections)
 
 
@@ -359,7 +361,8 @@ def main():
 
                 #print("\n")
                 transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
-                wordno_store = current_word_number + current_word_number_temporary_offset
+                wordno_store = current_word_number + current_word_number_temporary_offset/3
+                print (wordno_store)
                 #print(transcript_full+transcript_pending)
     except KeyboardInterrupt:
         print ("\n bye felsha")
