@@ -18,6 +18,8 @@ transcript_pending = ""
 wpm_current = 0
 realtime_wpm = 0
 
+start = time.time()
+
 expected_word = ""
 current_word_number = 0
 current_word_number_temporary_offset = 0
@@ -171,18 +173,34 @@ def listen_print_loop(responses): #unused
     print (realtime_wpm)
     return (realtime_wpm)'''
 
+wpm_difference_list = [54, 45, 45,45 ,34, 23,42]
+
 def word_chunky_thingalt():
-    global last_time, realtime_wpm
+    global last_time, realtime_wpm, wpm_difference_list, start
     end = time.time()
     beg = last_time
 
-    realtime_wpm = ((1)/(end - beg))*60
+    data_crunched = []
+    wpm_difference_list.append(time.time() - start)
 
-    print ("WPM result realtime: {}".format(realtime_wpm))
+    realtime_wpm = time.time() - start
 
-    last_time =
-    
-    return (realtime_wpm)
+    counter = -1
+    for i in wpm_difference_list:
+        counter += 1
+        data_crunched.append(i - wpm_difference_list[counter-1])
+
+    print(data_crunched)
+
+    # wpm_difference_list.append(((1)/(enxd - beg))*60)
+
+
+    print ("WPM average realtime: {}\n".format(float(sum(data_crunched[-6:-1]))/len(data_crunched[-6:-1])* 600))
+    # print(wpm_difference_list)
+
+    # last_time =
+
+    # return (realtime_wpm)
 
 def process_chunk(chunk_text):
     global wpm_current, current_word_number
