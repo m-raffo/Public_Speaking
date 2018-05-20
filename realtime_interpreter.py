@@ -4,7 +4,6 @@ import os
 import re
 import sys
 import jellyfish
-import time
 
 
 # Imports the Google Cloud client library
@@ -21,7 +20,6 @@ transcript_pending = ""
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms !!!!THIS IS NOT OUR VARIABLE!!!!
-last_time = time.time()
 
 class correction:
     expected_index=0
@@ -148,23 +146,7 @@ def listen_print_loop(responses): #unused
                 break
             num_chars_printed = 0
 
-def word_chunky_thing(input_thing):
-    global last_time
-    end = time.time()
-    beg = last_time
-    chunkie = input_thing
-
-    words_in_chunkie = len(chunkie.split(' '))
-
-    realtime_wpm = ((words_in_chunkie * 60)/(end - beg)) 
-
-    print (realtime_wpm)
-    return (realtime_wpm)
-            
 def process_chunk(chunk_text):
-    thing = chunk_text
-    
-    word_chunky_thing(thing)
     print (chunk_text)
 
 #APPLY FUCKING CORRECTIONS
@@ -177,11 +159,11 @@ def apply_corrections(uncorrected_string, corrections):
     while (i < len(words) and j < len(corrections)):
         if corrections[j].expected_index == i:
             if words[i] == corrections[j].old_string:
-                #print("correction applying")
+                print("correction foumd")
                 words[i]=corrections[j].new_string
 
-            #else:
-                #print("Minor error: it seems the string has unexpectedly changed")
+            else:
+                print("Minor error: it seems the string has unexpectedly changed")
             j += 1
         else:
             i += 1
@@ -189,12 +171,9 @@ def apply_corrections(uncorrected_string, corrections):
 
 def gen_corrections(only_last, uncorrected_string):
     global transcript_corrections
-
-    expected_word = "emeel" #TODO make this not trash
-
     words = uncorrected_string.split(' ')
     if only_last:
-        words_to_check = [len(words)-1]
+        words_to_check = len(words)-1
     else:
         words_to_check = range(0, len(words)-1)
 
@@ -205,18 +184,18 @@ def gen_corrections(only_last, uncorrected_string):
             found_correction=True #if its close indicate the correction to be made
 
         if found_correction:
-            #print("correction foumd")
             #Replace the actual word in the list, and store to intrim
             #words[-1] = expected_word
             #Create correction object
-            o = correction()
+            o = correction
             o.expected_index=i #blechED YOU ARE IT WORKS-ish
             o.old_string=words[i]
             o.new_string=expected_word
             #Add it to the list...
             transcript_corrections.append(o)
-            #CORRECTION: NO I AM U'RE DAD
-            # Daddi :P
+        transcript_pending = cur_text
+
+
 
 def main():
     global transcript_full, transcript_pending, transcript_corrections
@@ -244,30 +223,37 @@ def main():
         print ("Init.")
         expected_word = "emeel"
         for cur_response in responses:
-            #try:
-            cur_text = str(cur_response.results[0].alternatives[0].transcript)
-            if cur_response.results[0].is_final:
-                transcript_corrections = []
-                gen_corrections(False, cur_text)
-                cur_text = apply_corrections(cur_text, transcript_corrections)
+            try:
+                cur_text = str(cur_response.results[0].alternatives[0].transcript)
+                if cur_response.results[0].is_final:
+                    transcript_corrections = []
+                    process_chunk(cur_text)
+                    transcript_full += apply_corrections(cur_text, transcript_corrections)
+                    transcript_corrections = []
+                    #transcript_full+=str(cur_text)
+                else:
+                    #autocorrect based on script
+            stuff = cur_response.results[0].alternatives[0].transcript
+            blist = stuff.split()
+            print(blist)
+            
+            for d in blist:
+                for c in words:
+                    if c == d:
+                        print("same")
+                        break
+                    else:
+                        print("nah son")
+                        print(d + " this is wrong")
+    
+                    transcript_pending = cur_text
 
-                transcript_full+=cur_text;
+            except:
+                print ("error: likely recieved and empty input")
 
-                transcript_corrections = []
-
-                process_chunk(cur_text)
-                #transcript_full+=str(cur_text)
-            else:
-                #autocorrect based on script
-                gen_corrections(True, cur_text)
-                transcript_pending = cur_text
-
-            #except:
-            #    print ("error: likely recieved an empty input")
-
-            #print ("\n")
-            transcript_pending = apply_corrections (transcript_pending, transcript_corrections)
-            #print (transcript_full+transcript_pending)
+            print("\n")
+            transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
+            #print(transcript_full+transcript_pending)
 if __name__ == '__main__':
     main()
 
