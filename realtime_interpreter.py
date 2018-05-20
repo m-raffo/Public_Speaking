@@ -1,5 +1,5 @@
-import time
 from __future__ import division
+import time
 import os
 import re
 import sys
@@ -21,6 +21,9 @@ transcript_pending = ""
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms !!!!THIS IS NOT OUR VARIABLE!!!!
 last_time = time.time()
+prompt = input("write prompt here")
+words = prompt.split(",")
+print(words)
 
 class correction:
     expected_index=0
@@ -97,14 +100,11 @@ class MicrophoneStream(object):
 
 def listen_print_loop(responses): #unused
     """Iterates through server responses and prints them.
-
     The responses passed is a generator that will block until a response
     is provided by the server.
-
     Each response may contain multiple results, and each result may contain
     multiple alternatives; for details, see https://goo.gl/tjCPAU.  Here we
     print only the transcription for the top alternative of the top result.
-
     In this case, responses are provided for interim results as well. If the
     response is an interim one, print a line feed at the end of it, to allow
     the next result to overwrite it, until the response is a final one. For the
@@ -164,6 +164,7 @@ def word_chunky_thing(input_thing):
 def process_chunk(chunk_text):
     thing = chunk_text
     
+    athing(chunk_text)
     word_chunky_thing(thing)
     print (chunk_text)
 
@@ -213,8 +214,16 @@ def gen_corrections(only_last, uncorrected_string):
             transcript_corrections.append(o)
         transcript_pending = cur_text
 
-
-
+def athing(inthing):
+    stuff = inthing
+    blist = stuff.split()
+    #print(blist)
+            
+    for d in blist:
+        for c in words:
+            if c != d:
+                print(d + " this is wrong")
+                break
 def main():
     global transcript_full, transcript_pending, transcript_corrections
     # See http://g.co/cloud/speech/docs/languages
@@ -251,18 +260,6 @@ def main():
                     #transcript_full+=str(cur_text)
                 else:
                     #autocorrect based on script
-            stuff = cur_response.results[0].alternatives[0].transcript
-            blist = stuff.split()
-            print(blist)
-            
-            for d in blist:
-                for c in words:
-                    if c == d:
-                        print("same")
-                        break
-                    else:
-                        print("nah son")
-                        print(d + " this is wrong")
     
                     transcript_pending = cur_text
 
