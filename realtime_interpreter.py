@@ -1,4 +1,4 @@
-
+import time
 from __future__ import division
 import os
 import re
@@ -20,11 +20,13 @@ transcript_pending = ""
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms !!!!THIS IS NOT OUR VARIABLE!!!!
+last_time = time.time()
 
 class correction:
     expected_index=0
     old_string=""
     new_string=""
+    
 transcript_corrections = []
 
 class MicrophoneStream(object):
@@ -146,7 +148,23 @@ def listen_print_loop(responses): #unused
                 break
             num_chars_printed = 0
 
+def word_chunky_thing(input_thing):
+    global last_time
+    end = time.time()
+    beg = last_time
+    chunkie = input_thing
+
+    words_in_chunkie = len(chunkie.split(' '))
+
+    realtime_wpm = ((words_in_chunkie * 60)/(end - beg)) 
+
+    print (realtime_wpm)
+    return (realtime_wpm)
+            
 def process_chunk(chunk_text):
+    thing = chunk_text
+    
+    word_chunky_thing(thing)
     print (chunk_text)
 
 #APPLY FUCKING CORRECTIONS
