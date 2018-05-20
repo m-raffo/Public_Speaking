@@ -94,30 +94,30 @@ class Window(Frame):
         print(wpm_settings)
 
         if wpm > wpm_settings [0]  and wpm / 2.0 <= wpm_settings [1]:
-            self.pace_tip['text'] = "Bad"
+            self.speed_tip['text'] = "Bad"
 
 
 
         elif wpm >= wpm_settings [1] and wpm / 2.0 <= wpm_settings [2]:
-            self.pace_tip['text'] = "meh"
+            self.speed_tip['text'] = "meh"
 
 
 
         elif wpm >= wpm_settings [2] and wpm / 2.0 <= wpm_settings [3]:
-            self.pace_tip['text'] = "good"
+            self.speed_tip['text'] = "good"
 
 
 
         elif wpm >= wpm_settings [3] and wpm / 2.0 <= wpm_settings [4]:
-            self.pace_tip['text'] = "meh"
+            self.speed_tip['text'] = "meh"
 
 
 
         elif wpm >= wpm_settings [4] and wpm / 2.0 <= wpm_settings [5]:
-            self.pace_tip['text'] = "Bad"
+            self.speed_tip['text'] = "Bad"
 
         else:
-            self.pace_tip['text'] = "asldkfjlaksjf"
+            self.speed_tip['text'] = "asldkfjlaksjf"
         # self.text.see(1)
         # print(self.scrollb.get())
 
