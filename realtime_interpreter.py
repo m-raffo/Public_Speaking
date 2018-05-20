@@ -159,11 +159,11 @@ def apply_corrections(uncorrected_string, corrections):
     while (i < len(words) and j < len(corrections)):
         if corrections[j].expected_index == i:
             if words[i] == corrections[j].old_string:
-                print("correction foumd")
+                #print("correction applying")
                 words[i]=corrections[j].new_string
 
-            else:
-                print("Minor error: it seems the string has unexpectedly changed")
+            #else:
+                #print("Minor error: it seems the string has unexpectedly changed")
             j += 1
         else:
             i += 1
@@ -171,9 +171,12 @@ def apply_corrections(uncorrected_string, corrections):
 
 def gen_corrections(only_last, uncorrected_string):
     global transcript_corrections
+
+    expected_word = "emeel" #TODO make this not trash
+
     words = uncorrected_string.split(' ')
     if only_last:
-        words_to_check = len(words)-1
+        words_to_check = [len(words)-1]
     else:
         words_to_check = range(0, len(words)-1)
 
@@ -184,18 +187,18 @@ def gen_corrections(only_last, uncorrected_string):
             found_correction=True #if its close indicate the correction to be made
 
         if found_correction:
+            #print("correction foumd")
             #Replace the actual word in the list, and store to intrim
             #words[-1] = expected_word
             #Create correction object
-            o = correction
+            o = correction()
             o.expected_index=i #blechED YOU ARE IT WORKS-ish
             o.old_string=words[i]
             o.new_string=expected_word
             #Add it to the list...
             transcript_corrections.append(o)
-        transcript_pending = cur_text
-
-
+            #CORRECTION: NO I AM U'RE DAD
+            # Daddi :P
 
 def main():
     global transcript_full, transcript_pending, transcript_corrections
@@ -223,26 +226,30 @@ def main():
         print ("Init.")
         expected_word = "emeel"
         for cur_response in responses:
-            try:
-                cur_text = str(cur_response.results[0].alternatives[0].transcript)
-                if cur_response.results[0].is_final:
-                    transcript_corrections = []
-                    process_chunk(cur_text)
-                    gen_corrections(False, cur_text)
-                    transcript_full += apply_corrections(cur_text, transcript_corrections)
-                    transcript_corrections = []
-                    #transcript_full+=str(cur_text)
-                else:
-                    #autocorrect based on script
-                    gen_corrections(True, cur_text)
-                    transcript_pending = cur_text
+            #try:
+            cur_text = str(cur_response.results[0].alternatives[0].transcript)
+            if cur_response.results[0].is_final:
+                transcript_corrections = []
+                gen_corrections(False, cur_text)
+                cur_text = apply_corrections(cur_text, transcript_corrections)
 
-            except:
-                print ("error: likely recieved and empty input")
+                transcript_full+=cur_text;
 
-            print("\n")
-            transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
-            print(transcript_full+transcript_pending)
+                transcript_corrections = []
+
+                process_chunk(cur_text)
+                #transcript_full+=str(cur_text)
+            else:
+                #autocorrect based on script
+                gen_corrections(True, cur_text)
+                transcript_pending = cur_text
+
+            #except:
+            #    print ("error: likely recieved an empty input")
+
+            #print ("\n")
+            transcript_pending = apply_corrections (transcript_pending, transcript_corrections)
+            #print (transcript_full+transcript_pending)
 if __name__ == '__main__':
     main()
 
