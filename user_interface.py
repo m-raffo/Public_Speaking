@@ -6,10 +6,9 @@ from tkinter.font import Font
 import os
 from random import randint
 import plot
-import threading
-import realtime_interpreter
+import _thread
 
-
+from backend import realtime_interpreter
 
 # os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
 # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
@@ -58,7 +57,9 @@ imagepath = 'sample chart.png'
 
 class Window(Frame):
     def update(self, position, wpm, volume):
+        # return None
         print("Updating...")
+        print("Current wpm: {}".format(wpm))
         self.past_wpm.append(wpm)
         self.past_volume.append(volume)
 
@@ -126,7 +127,7 @@ class Window(Frame):
         self.labelframe = LabelFrame(self.root, text="", width=700, height= 1, bg= TEXTBOX_BG)
         self.labelframe.pack(fill=tkinter.Y, side=tkinter.RIGHT, expand=False)
 
-        self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,randint(0,150),randint(0,150)))
+        self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,realtime_interpreter.get_wpm(),randint(0,150)))
         self.dostuff.pack()
 
         # Bold font
@@ -275,11 +276,13 @@ root = Tk()
 
 def task():
     # Run the backend code
+    print("Running main now...")
     realtime_interpreter.main()
 
 
 app = Window(root)
-root.after(2000, task)
+# root.after(2000, task)
+_thread.start_new_thread( task, () )
 root.mainloop()
 
 print("Moving on..")
