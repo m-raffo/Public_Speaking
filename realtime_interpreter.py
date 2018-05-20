@@ -103,10 +103,10 @@ class MicrophoneStream(object):
             yield b''.join(data)
 # [END audio_stream]
 
-def get_wpm() {
+def get_wpm():
     global wpm_current
     return wpm_current
-}
+
 def listen_print_loop(responses): #unused
     """Iterates through server responses and prints them.
     The responses passed is a generator that will block until a response
