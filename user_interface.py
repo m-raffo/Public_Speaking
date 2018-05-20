@@ -2,6 +2,8 @@ from tkinter import *
 import tkinter
 from PIL import ImageTk, Image
 from tkinter.font import Font
+import os
+os.system("python3 plot.py")
 
 
 WINDOW_BG = "#ffffff"
