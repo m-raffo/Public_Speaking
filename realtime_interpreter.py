@@ -4,7 +4,7 @@ import os
 import re
 import sys
 import jellyfish
-
+import user_interface
 
 # Imports the Google Cloud client library
 import pyaudio
@@ -15,6 +15,7 @@ from google.cloud.speech import types
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./apicred.json"
 transcript_full = ""
 transcript_pending = ""
+wpm_current = 0
 
 # Instantiates a client
 # Audio recording parameters
@@ -29,8 +30,13 @@ class correction:
     expected_index=0
     old_string=""
     new_string=""
-    
+
 transcript_corrections = []
+
+
+#SCRIPTPTPTPTPT
+text_file = open("script.txt", "r")
+
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
@@ -97,7 +103,10 @@ class MicrophoneStream(object):
             yield b''.join(data)
 # [END audio_stream]
 
-
+def get_wpm() {
+    global wpm_current
+    return wpm_current
+}
 def listen_print_loop(responses): #unused
     """Iterates through server responses and prints them.
     The responses passed is a generator that will block until a response
@@ -156,16 +165,17 @@ def word_chunky_thing(input_thing):
 
     words_in_chunkie = len(chunkie.split(' '))
 
-    realtime_wpm = ((words_in_chunkie * 60)/(end - beg)) 
+    realtime_wpm = ((words_in_chunkie * 60)/(end - beg))
 
     print (realtime_wpm)
     return (realtime_wpm)
-            
+
 def process_chunk(chunk_text):
+    global wpm_current
     thing = chunk_text
-    
-    athing(chunk_text)
-    word_chunky_thing(thing)
+
+    #athing(chunk_text)
+    wpm_current = word_chunky_thing(thing)
     print (chunk_text)
 
 #APPLY FUCKING CORRECTIONS
@@ -218,7 +228,7 @@ def athing(inthing):
     stuff = inthing
     blist = stuff.split()
     #print(blist)
-            
+
     for d in blist:
         for c in words:
             if c != d:
@@ -260,7 +270,7 @@ def main():
                     #transcript_full+=str(cur_text)
                 else:
                     #autocorrect based on script
-    
+
                     transcript_pending = cur_text
 
             except:
