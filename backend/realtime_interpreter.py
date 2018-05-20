@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import jellyfish
+#import user_interface
 
 # Imports the Google Cloud client library
 import pyaudio
@@ -16,12 +17,13 @@ transcript_full = ""
 transcript_pending = ""
 wpm_current = 0
 
+scriptv = []
 # Instantiates a client
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms !!!!THIS IS NOT OUR VARIABLE!!!!
 last_time = time.time()
-prompt = input("write prompt here")
+prompt = 'test'#input("write prompt here")
 words = prompt.split(",")
 print(words)
 
@@ -31,11 +33,6 @@ class correction:
     new_string=""
 
 transcript_corrections = []
-
-print("LOADNG")
-
-#SCRIPTPTPTPTPT
-# text_file = open("script.txt", "r")
 
 
 class MicrophoneStream(object):
@@ -235,7 +232,7 @@ def athing(inthing):
                 print(d + " this is wrong")
                 break
 def main():
-    global transcript_full, transcript_pending, transcript_corrections
+    global transcript_full, transcript_pending, transcript_corrections, scriptv
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
@@ -258,6 +255,13 @@ def main():
 
         # Now, put the transcription responses to use.
         print ("Init.")
+        print("NO")
+        with open("./script.txt", "r") as text_file:
+            sriptv = text_file.readlines()
+            print(sriptv)
+
+        print("daddi")
+
         expected_word = "emeel"
         for cur_response in responses:
             try:
