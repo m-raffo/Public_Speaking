@@ -70,7 +70,7 @@ class Window(Frame):
         line_count, word_count = self.get_index_by_word_number(speech, word_count)
         # print(line_count, word_count)
         line_count = line_count * 2 -1
-        self.text.tag_add("BOLD", '{0}.{1}'.format(line_count, word_count), '{0}.{1}'.format(line_count, word_count+3))
+        self.text.tag_add("BOLD", '{0}.{1}'.format(line_count, word_count), '{0}.{1}'.format(line_count, word_count+10))
 
 
     def update(self, position, wpm, volume):
@@ -94,36 +94,36 @@ class Window(Frame):
         print(wpm_settings)
 
         if wpm > wpm_settings [0]  and wpm / 2.0 <= wpm_settings [1]:
-            self.speed_tip['text'] = "Speak a lot faster"
-            self.speed_tip.config(bg='#ff0000')
+            self.speed_tip['text'] = "Speak a lot slower"
+            self.speed_tip.config(fg='#ff0000')
 
 
 
         elif wpm >= wpm_settings [1] and wpm / 2.0 <= wpm_settings [2]:
-            self.speed_tip['text'] = "Speak a little faster"
-            self.speed_tip.config(bg='#c9cf00')
+            self.speed_tip['text'] = "Speak a little slower"
+            self.speed_tip.config(fg='#c9cf00')
 
 
 
         elif wpm >= wpm_settings [2] and wpm / 2.0 <= wpm_settings [3]:
             self.speed_tip['text'] = "Good speed"
-            self.speed_tip.config(bg='#009800')
+            self.speed_tip.config(fg='#009800')
 
 
 
         elif wpm >= wpm_settings [3] and wpm / 2.0 <= wpm_settings [4]:
-            self.speed_tip['text'] = "Speak a little slower"
-            self.speed_tip.config(bg='#c9cf00')
+            self.speed_tip['text'] = "Speak a little faster"
+            self.speed_tip.config(fg='#c9cf00')
 
 
 
         elif wpm >= wpm_settings [4] and wpm / 2.0 <= wpm_settings [5]:
-            self.speed_tip['text'] = "Speak a lot slower"
-            self.speed_tip.config(bg='#ff0000')
+            self.speed_tip['text'] = "Speak a lot faster"
+            self.speed_tip.config(fg='#ff0000')
 
         else:
             self.speed_tip['text'] = "Please speak to register your voice"
-            self.speed_tip.config(bg='black')
+            self.speed_tip.config(fg='black')
         # self.text.see(1)
         # print(self.scrollb.get())
 
@@ -138,11 +138,11 @@ class Window(Frame):
         self.Artwork.image = img2
 
 
-
+        num_words = realtime_interpreter.get_word_number()
 
         # Update by word number
-        # print("hi"+str(realtime_interpreter.get_word_number()))
-        # self.bold_by_word_number(realtime_interpreter.get_word_number())
+        print("hi____"+str(num_words))
+        self.bold_by_word_number(num_words)
         # self.text.yview_moveto(0.5)
 
 

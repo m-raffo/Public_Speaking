@@ -13,6 +13,17 @@ SMOOTHING = 50
 last_y = 0
 
 
+def get_wpm_settings_outside(wpm_aim, lower, upper):
+    total = upper
+    segment_amount = total / 5.0
+
+    settings = [lower]
+    for i in range(1,6):
+        settings.append(segment_amount * i)
+
+    return settings
+
+
 def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
     global last_y
 
