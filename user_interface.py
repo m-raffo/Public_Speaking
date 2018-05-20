@@ -148,6 +148,15 @@ class Window(Frame):
 
         self.labelframe_volumechart.pack(fill=tkinter.X, expand=False , padx = 0, pady = 0)
 
+        self.past_wpm = []
+        self.past_volume = []
+
+
+    def update(self, words, wpm, volume):
+        self.past_wpm.append(wpm)
+        self.past_volume.append(volume)
+
+
 
 
 
