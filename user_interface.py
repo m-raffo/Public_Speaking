@@ -101,9 +101,9 @@ class Window(Frame):
 
 
 
-        img2 = ImageTk.PhotoImage(Image.open("rect2.png"))
-        self.Artwork1.configure(image=img2)
-        self.Artwork1.image = img2
+        # img2 = ImageTk.PhotoImage(Image.open("rect2.png"))
+        # self.Artwork1.configure(image=img2)
+        # self.Artwork1.image = img2
 
     def get_index_by_word_number(self,speech, word_count):
         current_found = 0
@@ -138,8 +138,8 @@ class Window(Frame):
         self.labelframe = LabelFrame(self.root, text="", width=700, height= 1, bg= TEXTBOX_BG)
         self.labelframe.pack(fill=tkinter.Y, side=tkinter.RIGHT, expand=False)
 
-        self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,realtime_interpreter.get_wpm(),randint(1,5)))
-        self.dostuff.pack()
+        # self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,realtime_interpreter.get_wpm(),randint(1,5)))
+        # self.dostuff.pack()
 
         # Bold font
         self.bold_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="bold")
@@ -240,30 +240,30 @@ class Window(Frame):
         self.spaceholder2 = Frame(self.labelframe, bg = TEXTBOX_BG)
         self.spaceholder2.pack(fill = X, pady= 50/2)
 
-        self.labelframe_volumechart_numbers = Frame(self.labelframe, width=1, height= 1, bg = TEXTBOX_BG)
-        self.labelframe_volumechart_numbers.pack(fill=tkinter.X, expand=False , padx = 0)
+        # self.labelframe_volumechart_numbers = Frame(self.labelframe, width=1, height= 1, bg = TEXTBOX_BG)
+        # self.labelframe_volumechart_numbers.pack(fill=tkinter.X, expand=False , padx = 0)
 
 
 
 
-        self.volume_value_label = Label(self.labelframe_volumechart_numbers, text= "Volume:", fg="black", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = TEXTBOX_BG)
-        self.volume_value = Label(self.labelframe_volumechart_numbers, text= "1.5x ambient", fg="black", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = TEXTBOX_BG)
+        # self.volume_value_label = Label(self.labelframe_volumechart_numbers, text= "Volume:", fg="black", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = TEXTBOX_BG)
+        # self.volume_value = Label(self.labelframe_volumechart_numbers, text= "1.5x ambient", fg="black", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = TEXTBOX_BG)
 
 
 
 
-        self.volume_value.pack(fill=tkinter.X, expand=True, side = RIGHT)
-        self.volume_value_label.pack(fill=tkinter.X, expand=True, side = LEFT)
-
-        self.labelframe_volumechart = Frame(self.labelframe, width=1, height= 1, bg = TEXTBOX_BG)
-
-
-        self.photo1 = ImageTk.PhotoImage(Image.open('rect2.png'))
-        self.Artwork1 = Label(self.labelframe_volumechart, image=self.photo1)
-        self.Artwork1.photo = self.photo1
-        self.Artwork1.pack()
-
-        self.labelframe_volumechart.pack(fill=tkinter.X, expand=False , padx = 0, pady = 0)
+        # self.volume_value.pack(fill=tkinter.X, expand=True, side = RIGHT)
+        # self.volume_value_label.pack(fill=tkinter.X, expand=True, side = LEFT)
+        #
+        # self.labelframe_volumechart = Frame(self.labelframe, width=1, height= 1, bg = TEXTBOX_BG)
+        #
+        #
+        # self.photo1 = ImageTk.PhotoImage(Image.open('rect2.png'))
+        # self.Artwork1 = Label(self.labelframe_volumechart, image=self.photo1)
+        # self.Artwork1.photo = self.photo1
+        # self.Artwork1.pack()
+        #
+        # self.labelframe_volumechart.pack(fill=tkinter.X, expand=False , padx = 0, pady = 0)
 
 
 

@@ -197,7 +197,7 @@ def word_chunky_thingalt():
     # wpm_difference_list.append(((1)/(enxd - beg))*60)
 
 
-    print ("WPM average realtime: {}\n".format(float(sum(data_crunched[-6:-1]))/len(data_crunched[-6:-1])* 600))
+    # print ("WPM average realtime: {}\n".format(float(sum(data_crunched[-6:-1]))/len(data_crunched[-6:-1])* 600))
     # print(wpm_difference_list)
 
     # last_time =
