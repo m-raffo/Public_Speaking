@@ -1,4 +1,3 @@
-import matplotlib as mpl
 from tkinter import *
 import tkinter
 from PIL import ImageTk, Image
