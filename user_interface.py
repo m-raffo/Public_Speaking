@@ -100,6 +100,12 @@ class Window(Frame):
 
 
 
+
+        # Update by word number
+        bold_by_word_number(realtime_interpreter.get_word_number())
+
+
+
         # img2 = ImageTk.PhotoImage(Image.open("rect2.png"))
         # self.Artwork1.configure(image=img2)
         # self.Artwork1.image = img2
