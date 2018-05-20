@@ -18,6 +18,7 @@ transcript_pending = ""
 wpm_current = 0
 
 current_word_number = 0
+current_word_number_temporary_offset = 0
 scriptv = []
 # Instantiates a client
 # Audio recording parameters
@@ -155,7 +156,7 @@ def listen_print_loop(responses): #unused
                 break
             num_chars_printed = 0
 
-def word_chunky_thing(input_thing):
+'''def word_chunky_thing(input_thing):
     global last_time
     end = time.time()
     beg = last_time
@@ -166,6 +167,19 @@ def word_chunky_thing(input_thing):
     realtime_wpm = ((words_in_chunkie)/(end - beg))*60
 
     print (realtime_wpm)
+    return (realtime_wpm)'''
+
+def word_chunky_thingalt(input_thing):
+    global last_time
+    end = time.time()
+    beg = last_time
+    chunkie = input_thing
+
+    words_in_chunkie = len(chunkie.split(' '))
+
+    realtime_wpm = ((1)/(end - beg))*60
+
+    print (realtime_wpm)
     return (realtime_wpm)
 
 def process_chunk(chunk_text):
@@ -173,13 +187,16 @@ def process_chunk(chunk_text):
     thing = chunk_text
 
     #athing(chunk_text)
-    wpm_current = word_chunky_thing(thing)
 
     current_word_number += len(chunk_text.split(' '))
+    #wpm_current = word_chunky_thing(thing)
 
 
+    #print (chunk_text)
 
-    print (chunk_text)
+def process_mini_chunk(chunk_text):
+    wpm_current = word_chunky_thingalt(thing)
+
 
 #APPLY FUCKING CORRECTIONS
 def apply_corrections(uncorrected_string, corrections):
@@ -207,7 +224,7 @@ def gen_corrections(only_last, uncorrected_string):
     global transcript_corrections
     words = uncorrected_string.split(' ')
     if only_last:
-        words_to_check = len(words)-1
+        words_to_check = [len(words)-1]
     else:
         words_to_check = range(0, len(words)-1)
 
@@ -249,7 +266,7 @@ def athing(inthing):
 def main():
     try:
     #if True:
-        global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number
+        global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number, current_word_number_temporary_offset
         # See http://g.co/cloud/speech/docs/languages
         # for a list of supported languages.
         language_code = 'en-US'  # a BCP-47 language tag
@@ -278,34 +295,37 @@ def main():
                 #print(scriptv)
 
             #print("daddi")
-
-            expected_word = "hi"
+            expected_word="xxx_placeholder_xxx"
             for cur_response in responses:
-                try:
+                expected_word = scriptv[current_word_number+current_word_number_temporary_offset]
+                print ("expected_word: " + expected_word)
+                #try:
+                if True:
                     cur_text = str(cur_response.results[0].alternatives[0].transcript)
                     if cur_response.results[0].is_final:
                         transcript_corrections = []
+                        gen_corrections(False, cur_text)
                         process_chunk(cur_text)
                         transcript_full += apply_corrections(cur_text, transcript_corrections)
                         transcript_corrections = []
                         #transcript_full+=str(cur_text)
                     else:
                         #autocorrect based on script
+                        gen_corrections(True, cur_text)
+                        transcript_pending = apply_corrections(cur_text, transcript_corrections)
 
-                        transcript_pending = cur_text
 
-
-                except:
-                    print ("error: likely recieved and empty input")
+                #except:
+                #    print ("error: likely recieved and empty input")
 
                 #print("\n")
                 transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
                 print(transcript_full+transcript_pending)
     except KeyboardInterrupt:
         print ("\n bye felsha")
-    except:
-        print ("timeout quickfix")
-        flush_unsure()
-        main()
+    #except Exception as e:
+    #    print ("timeout quickfix: " + str(e))
+    #    flush_unsure()
+    #    main()
 if __name__ == '__main__':
     main()
