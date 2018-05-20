@@ -94,30 +94,36 @@ class Window(Frame):
         print(wpm_settings)
 
         if wpm > wpm_settings [0]  and wpm / 2.0 <= wpm_settings [1]:
-            self.speed_tip['text'] = "Bad"
+            self.speed_tip['text'] = "Speak a lot faster"
+            self.speed_tip.config(bg='#ff0000')
 
 
 
         elif wpm >= wpm_settings [1] and wpm / 2.0 <= wpm_settings [2]:
-            self.speed_tip['text'] = "meh"
+            self.speed_tip['text'] = "Speak a little faster"
+            self.speed_tip.config(bg='#c9cf00')
 
 
 
         elif wpm >= wpm_settings [2] and wpm / 2.0 <= wpm_settings [3]:
-            self.speed_tip['text'] = "good"
+            self.speed_tip['text'] = "Good speed"
+            self.speed_tip.config(bg='#009800')
 
 
 
         elif wpm >= wpm_settings [3] and wpm / 2.0 <= wpm_settings [4]:
-            self.speed_tip['text'] = "meh"
+            self.speed_tip['text'] = "Speak a little slower"
+            self.speed_tip.config(bg='#c9cf00')
 
 
 
         elif wpm >= wpm_settings [4] and wpm / 2.0 <= wpm_settings [5]:
-            self.speed_tip['text'] = "Bad"
+            self.speed_tip['text'] = "Speak a lot slower"
+            self.speed_tip.config(bg='#ff0000')
 
         else:
-            self.speed_tip['text'] = "asldkfjlaksjf"
+            self.speed_tip['text'] = "Please speak to register your voice"
+            self.speed_tip.config(bg='black')
         # self.text.see(1)
         # print(self.scrollb.get())
 
