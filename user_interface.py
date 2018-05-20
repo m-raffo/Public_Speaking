@@ -69,16 +69,16 @@ imagepath = 'sample chart.png'
 class Window(Frame):
     def update(self, position, wpm, volume):
         # return None
-        print("Current wpm: {}".format(wpm))
+        # print("Current wpm: {}".format(wpm))
         wpm = clamp(MAXWPM - realtime_interpreter.get_wpm(), MINWPM, MAXWPM)
-        print("Updating...")
-        print("Current wpm (clamped): {}".format(wpm))
+        # print("Updating...")
+        # print("Current wpm (clamped): {}".format(wpm))
         # print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
         self.past_wpm.append(wpm)
         # self.past_volume.append(volume)
         self.pace_value['text'] = '{} WPM'.format(int(wpm))
 
-        self.wpm_average_history.append(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1]))
+        self.wpm_average_history.append(float(sum(self.past_wpm[-3:-1]))/len(self.past_wpm[-3:-1]))
         plot.save_plot(self.wpm_average_history[-10:-1], 'rect1.png', MAXWPM/  2.0, MINWPM, MAXWPM)
         # plot.save_plot(self.past_wpm, 'rect2.png', 5, 0, 10)
 
@@ -92,8 +92,8 @@ class Window(Frame):
 
         # os.system("python3 plot.py 0 150 300 {} rect2.png 140".format(str.join(',',past_wpm_str)))
 
-
-        print("Done computing...")
+#
+        # print("Done computing...")
 
         img2 = ImageTk.PhotoImage(Image.open("rect1.png"))
         self.Artwork.configure(image=img2)
@@ -118,7 +118,7 @@ class Window(Frame):
 
     def bold_by_word_number(self, word_count):
         line_count, word_count = self.get_index_by_word_number(speech, word_count)
-        print(line_count, word_count)
+        # print(line_count, word_count)
         line_count = line_count * 2 -1
         self.text.tag_add("BOLD", '{0}.{1}'.format(line_count, word_count), '{0}.{1}'.format(line_count, word_count+3))
         self.text.tag_add("BOLD", '2.3', '2.8')
@@ -297,7 +297,7 @@ app = Window(root)
 def nonstop_update():
     print("RNNNINGININGINGIN")
     while True:
-        print("Updating.........")
+        # print("Updating.........")
         app.update(0,realtime_interpreter.get_wpm(),randint(1,5))
         sleep(0.2)
 

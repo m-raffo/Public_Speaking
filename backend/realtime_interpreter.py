@@ -150,7 +150,7 @@ def listen_print_loop(responses): #unused
             sys.stdout.write(transcript + overwrite_chars + '\r')
             sys.stdout.flush()
 
-            num_chars_printed = len(transcript)
+            # num_chars_printed = len(transcript)
 
         else:
             print(transcript + overwrite_chars)
@@ -158,7 +158,7 @@ def listen_print_loop(responses): #unused
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
             if re.search(r'\b(exit|quit)\b', transcript, re.I):
-                print('Exiting..')
+                # print('Exiting..')
                 break
             num_chars_printed = 0
 
@@ -192,7 +192,7 @@ def word_chunky_thingalt():
         counter += 1
         data_crunched.append(i - wpm_difference_list[counter-1])
 
-    print(data_crunched)
+    # print(data_crunched)
 
     # wpm_difference_list.append(((1)/(enxd - beg))*60)
 
