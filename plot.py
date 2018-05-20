@@ -1,9 +1,6 @@
 from random import randint
 from scipy.interpolate import spline
-import matplotlib.patches as patches
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import savefig
 from PIL import Image, ImageDraw
 import sys
 
@@ -15,7 +12,7 @@ import sys
 last_y = None
 
 
-def save_plot(wpm_list, path):
+def save_plot(wpm_list, path, best_wpm, lower_limit, upper_limit):
     global last_y
 
     img = Image.new('RGB', (495, 200), color = '#ffffff')
@@ -83,7 +80,7 @@ def save_plot(wpm_list, path):
 
     x = np.asarray(list(range(len(wpm))), dtype=np.float32)
 
-    xnew = np.linspace(x.min(),x.max(),300)
+    xnew = np.linspace(x.min(),x.max(),5)
     power = np.array([1.53E+03, 5.92E+02, 2.04E+02, 7.24E+01, 2.72E+01, 1.10E+01, 4.70E+00])
 
     power_smooth = spline(x,wpm,xnew)
@@ -92,31 +89,26 @@ def save_plot(wpm_list, path):
 
     for x1, x2, y1,y2 in zip(xnew, xnew[1:], power_smooth, power_smooth[1:]):
         if (y1+y2) / 2.0 > wpm_settings [0]  and (y1+y2) / 2.0 <= wpm_settings [1]:
-            plt.plot([x1, x2], [y1, y2], 'r', linewidth = 2)
             plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#ff0000')
 
 
 
         elif (y1+y2) / 2.0 >= wpm_settings [1] and (y1+y2) / 2.0 <= wpm_settings [2]:
-            plt.plot([x1, x2], [y1, y2], 'y', linewidth = 2)
             plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#c9cf00')
 
 
 
         elif (y1+y2) / 2.0 >= wpm_settings [2] and (y1+y2) / 2.0 <= wpm_settings [3]:
-            plt.plot([x1, x2], [y1, y2], 'g', linewidth = 2)
             plot(x1, y1, x2, y2, 0,  max(xnew), upper_limit, lower_limit, '#009800')
 
 
 
         elif (y1+y2) / 2.0 >= wpm_settings [3] and (y1+y2) / 2.0 <= wpm_settings [4]:
-            plt.plot([x1, x2], [y1, y2], 'y', linewidth = 2)
             plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#c9cf00')
 
 
 
         elif (y1+y2) / 2.0 >= wpm_settings [4] and (y1+y2) / 2.0 <= wpm_settings [5]:
-            plt.plot([x1, x2], [y1, y2], 'r', linewidth = 2)
             plot(x1, x2, y1, y2, 0, len(xnew), 0, len(power_smooth), '#ff0000')
 
     total = img.height
@@ -140,50 +132,15 @@ def save_plot(wpm_list, path):
     print(last_y)
     draw.line((0,last_y,img.width, last_y), fill='#1a1a1a')
     # plot(0,xnew[-1], wpm[-1], wpm[-1], 0, max(xnew), 0, max(power_smooth), "#000000", )
-    img.save("test.png")
-
-    plt.ylim((lower_limit, upper_limit))
-    # plt.plot(wpm)
-
-
-    plt.ylabel('some numbers')
-    savefig(path)
-
-
-def post_process_img(path):
-    img = Image.open(path)
-
-    img = img.crop((81, 59, 81+ 495, 59+ 368))
-
-    draw = ImageDraw.Draw(img)
-
-
-    total = img.height
-    segment_amount = total / 5.0
-    lower = 0
-
-    settings = [lower]
-    for i in range(1,6):
-        settings.append(segment_amount * i)
-
-    lineheight = int(sys.argv[6])
-
-    lineheight = float(lineheight) / float(sys.argv[3]) * img.height
-
-    draw.rectangle((0, 0, 20, settings[1]), fill='#ff0000')
-    draw.rectangle((0, settings[1], 20, settings[2]), fill='#c9cf00')
-    draw.rectangle((0, settings[2], 20, settings[3]), fill='#009800')
-    draw.rectangle((0, settings[3], 20, settings[4]), fill='#c9cf00')
-    draw.rectangle((0, settings[4], 20, settings[5]), fill='#ff0000')
-    # draw.line([0,lineheight, img.width, lineheight], fill='#000000', width=3)
-
-
-    img = img.resize((img.width, 200))
-
-
     img.save(path)
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
     save_plot((), sys.argv[5])
-    post_process_img(sys.argv[5])
+    # post_process_img(sys.argv[5])

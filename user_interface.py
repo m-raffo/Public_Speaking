@@ -38,9 +38,12 @@ class Window(Frame):
         for i in self.past_wpm:
             past_wpm_str.append(str(i))
 
-        os.system("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
         print("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
+        os.system("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
+        os.system("python3 plot.py 0 150 300 {} rect2.png 140".format(str.join(',',past_wpm_str)))
 
+
+        print("Done computing...")
 
         img2 = ImageTk.PhotoImage(Image.open("rect1.png"))
         self.Artwork.configure(image=img2)
@@ -184,7 +187,7 @@ class Window(Frame):
         self.past_wpm = [150, 150, 150]
         self.past_volume = [150,150,150]
 
-        self.update(0, 150, 150)
+        # self.update(0, 150, 150)
 
 
 
