@@ -16,6 +16,7 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./apicred.json"
 transcript_full = ""
 transcript_pending = ""
 wpm_current = 0
+realtime_wpm = 0
 
 expected_word = ""
 current_word_number = 0
@@ -104,8 +105,8 @@ class MicrophoneStream(object):
 # [END audio_stream]
 
 def get_wpm():
-    global wpm_current
-    return wpm_current
+    global realtime_wpm
+    return realtime_wpm
 
 def listen_print_loop(responses): #unused
     """Iterates through server responses and prints them.
@@ -194,8 +195,9 @@ def process_chunk(chunk_text):
 
     #print (chunk_text)
 
-def process_mini_chunk(chunk_text):
-    wpm_current = word_chunky_thingalt(thing)
+#def process_mini_chunk(chunk_text):
+#    wpm_current = word_chunky_thingalt(thing)
+
 
 
 #APPLY FUCKING CORRECTIONS
