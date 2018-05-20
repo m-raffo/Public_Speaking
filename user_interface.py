@@ -71,7 +71,8 @@ class Window(Frame):
         plot.save_plot(self.past_wpm[-10:-1], 'rect1.png', 150, 0, 300)
         plot.save_plot(self.past_wpm, 'rect2.png', 150, 0, 300)
 
-        self.scrollb.set(.1, 0.8)
+        # self.scrollb.set(.1, 0.8)
+        self.text.yview_moveto(0.5)
         # self.text.see(1)
         # print(self.scrollb.get())
 
