@@ -41,7 +41,7 @@ class correction:
     new_string=""
 
 transcript_corrections = []
-
+wordno_store=0
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
@@ -201,8 +201,8 @@ def word_chunky_thingalt():
 
     # return (realtime_wpm)
 def get_word_number():
-    global current_word_number, current_word_number_temporary_offset
-    return current_word_number + current_word_number_temporary_offset
+    global wordno_store
+    return wordno_store
 
 
 def process_chunk(chunk_text):
@@ -359,6 +359,7 @@ def main():
 
                 #print("\n")
                 transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
+                wordno_store = current_word_number + current_word_number_temporary_offset
                 #print(transcript_full+transcript_pending)
     except KeyboardInterrupt:
         print ("\n bye felsha")
