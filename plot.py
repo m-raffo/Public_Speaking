@@ -12,10 +12,11 @@ import sys
 # python3 plot.py 0 150 300 234,200,197,160,140
 
 
-
+last_y = None
 
 
 def save_plot(wpm_list, path):
+    global last_y
 
     img = Image.new('RGB', (495, 200), color = '#ffffff')
     draw = ImageDraw.Draw(img)
@@ -30,21 +31,40 @@ def save_plot(wpm_list, path):
 
         return settings
 
+    best_wpm = int(sys.argv[2])
+    lower_limit = int(sys.argv[1])
+    upper_limit = int(sys.argv[3])
+
+
+
     def scale(min, max, newmin, newmax,  value):
+        global last_y
+        if False:
+            print ('-'*5)
+            print ("Scaling: {}".format(value))
+            print ('In between {0} and {1}'.format(min, max))
+            print ('To between {0} and {1}'.format(newmin, newmax))
+            print ('Answer {}'.format(((float(value) - float(min)) / (float(max) - float(min))) * (float(newmax) - float(newmin)) + float(newmin)))
         return ((float(value) - float(min)) / (float(max) - float(min))) * (float(newmax) - float(newmin)) + float(newmin)
 
-    def plot(x1, y1, x2, y2, minofgraphx, maxofgraphx, minofgraphy, maxofgraphy):
+    def plot(x1, y1, x2, y2, minofgraphx, maxofgraphx, minofgraphy, maxofgraphy, color = "#000000"):
+        global last_y
+        # print(x1, y1, x2, y2)
+
         x1 = scale(minofgraphx, maxofgraphx, 0, img.width, x1)
         x2 = scale(minofgraphx, maxofgraphx, 0, img.width, x2)
         y1 = scale(minofgraphy, maxofgraphy, 0, img.height, y1)
         y2 = scale(minofgraphy, maxofgraphy, 0, img.height, y2)
-        draw.line([x1, y1, x2, y2], fill='#000000', width=3)
+        draw.line([x1, y1, x2, y2], fill=color, width=3)
+
+        last_y = y2
+
+        # print(x1, y1, x2, y2)
+        # print('-'*4)
 
 
 
-    best_wpm = int(sys.argv[2])
-    lower_limit = int(sys.argv[1])
-    upper_limit = int(sys.argv[3])
+
 
     wpm_settings = get_wpm_settings(best_wpm, lower_limit, upper_limit)
 
@@ -68,26 +88,60 @@ def save_plot(wpm_list, path):
 
     power_smooth = spline(x,wpm,xnew)
 
-
-
+    # print(power_smooth)
 
     for x1, x2, y1,y2 in zip(xnew, xnew[1:], power_smooth, power_smooth[1:]):
         if (y1+y2) / 2.0 > wpm_settings [0]  and (y1+y2) / 2.0 <= wpm_settings [1]:
             plt.plot([x1, x2], [y1, y2], 'r', linewidth = 2)
+            plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#ff0000')
+
+
 
         elif (y1+y2) / 2.0 >= wpm_settings [1] and (y1+y2) / 2.0 <= wpm_settings [2]:
             plt.plot([x1, x2], [y1, y2], 'y', linewidth = 2)
+            plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#c9cf00')
+
+
 
         elif (y1+y2) / 2.0 >= wpm_settings [2] and (y1+y2) / 2.0 <= wpm_settings [3]:
             plt.plot([x1, x2], [y1, y2], 'g', linewidth = 2)
+            plot(x1, y1, x2, y2, 0,  max(xnew), upper_limit, lower_limit, '#009800')
+
+
 
         elif (y1+y2) / 2.0 >= wpm_settings [3] and (y1+y2) / 2.0 <= wpm_settings [4]:
             plt.plot([x1, x2], [y1, y2], 'y', linewidth = 2)
+            plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#c9cf00')
+
+
 
         elif (y1+y2) / 2.0 >= wpm_settings [4] and (y1+y2) / 2.0 <= wpm_settings [5]:
             plt.plot([x1, x2], [y1, y2], 'r', linewidth = 2)
+            plot(x1, x2, y1, y2, 0, len(xnew), 0, len(power_smooth), '#ff0000')
 
-    plt.plot([0,xnew[-1]], [wpm[-1], wpm[-1]], "#000000", linewidth = 2)
+    total = img.height
+    segment_amount = total / 5.0
+    lower = 0
+
+    settings = [lower]
+    for i in range(1,6):
+        settings.append(segment_amount * i)
+
+    lineheight = int(sys.argv[6])
+
+    lineheight = float(lineheight) / float(sys.argv[3]) * img.height
+
+    draw.rectangle((0, 0, 20, settings[1]), fill='#ff0000')
+    draw.rectangle((0, settings[1], 20, settings[2]), fill='#c9cf00')
+    draw.rectangle((0, settings[2], 20, settings[3]), fill='#009800')
+    draw.rectangle((0, settings[3], 20, settings[4]), fill='#c9cf00')
+    draw.rectangle((0, settings[4], 20, settings[5]), fill='#ff0000')
+
+    print(last_y)
+    draw.line((0,last_y,img.width, last_y), fill='#1a1a1a')
+    # plot(0,xnew[-1], wpm[-1], wpm[-1], 0, max(xnew), 0, max(power_smooth), "#000000", )
+    img.save("test.png")
+
     plt.ylim((lower_limit, upper_limit))
     # plt.plot(wpm)
 
@@ -131,5 +185,5 @@ def post_process_img(path):
 
 
 if __name__ == "__main__":
-    save_plot([], sys.argv[5])
+    save_plot((), sys.argv[5])
     post_process_img(sys.argv[5])
