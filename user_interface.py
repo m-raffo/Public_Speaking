@@ -66,6 +66,14 @@ imagepath = 'sample chart.png'
 
 
 class Window(Frame):
+    def bold_by_word_number(self, word_count):
+        line_count, word_count = self.get_index_by_word_number(speech, word_count)
+        # print(line_count, word_count)
+        line_count = line_count * 2 -1
+        self.text.tag_add("BOLD", '{0}.{1}'.format(line_count, word_count), '{0}.{1}'.format(line_count, word_count+3))
+        self.text.tag_add("BOLD", '2.3', '2.8')
+
+
     def update(self, position, wpm, volume):
         # return None
         # print("Current wpm: {}".format(wpm))
@@ -121,12 +129,7 @@ class Window(Frame):
                 current_found += len(i)
 
 
-    def bold_by_word_number(self, word_count):
-        line_count, word_count = self.get_index_by_word_number(speech, word_count)
-        # print(line_count, word_count)
-        line_count = line_count * 2 -1
-        self.text.tag_add("BOLD", '{0}.{1}'.format(line_count, word_count), '{0}.{1}'.format(line_count, word_count+3))
-        self.text.tag_add("BOLD", '2.3', '2.8')
+
 
 
     def __init__(self, master=None):
