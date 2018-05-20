@@ -24,6 +24,8 @@ expected_word = ""
 current_word_number = 0
 current_word_number_temporary_offset = 0
 scriptv = []
+
+data_crunched = [50,50,50,50]
 # Instantiates a client
 # Audio recording parameters
 RATE = 16000
@@ -107,8 +109,8 @@ class MicrophoneStream(object):
 # [END audio_stream]
 
 def get_wpm():
-    global realtime_wpm
-    return realtime_wpm
+    global realtime_wpm, data_crunched
+    return float(sum(data_crunched[-6:-1]))/len(data_crunched[-6:-1])* 600
 
 def listen_print_loop(responses): #unused
     """Iterates through server responses and prints them.
@@ -180,7 +182,7 @@ def word_chunky_thingalt():
     end = time.time()
     beg = last_time
 
-    data_crunched = []
+
     wpm_difference_list.append(time.time() - start)
 
     realtime_wpm = time.time() - start

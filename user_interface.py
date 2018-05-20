@@ -30,7 +30,7 @@ COLOR_BAD = "#ab0000" # Red
 
 MINWPM = 0
 
-MAXWPM = 1000
+MAXWPM = 200
 
 
 
@@ -70,12 +70,12 @@ class Window(Frame):
     def update(self, position, wpm, volume):
         # return None
         print("Current wpm: {}".format(wpm))
-        wpm = clamp(wpm, MINWPM, MAXWPM)
+        wpm = clamp(MAXWPM - realtime_interpreter.get_wpm(), MINWPM, MAXWPM)
         print("Updating...")
         print("Current wpm (clamped): {}".format(wpm))
-        print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
+        # print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
         self.past_wpm.append(wpm)
-        self.past_volume.append(volume)
+        # self.past_volume.append(volume)
         self.pace_value['text'] = '{} WPM'.format(int(wpm))
 
         self.wpm_average_history.append(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1]))
