@@ -6,7 +6,8 @@ from tkinter.font import Font
 import os
 from random import randint
 import plot
-
+import threading
+import realtime_interpreter
 
 
 
@@ -73,6 +74,8 @@ class Window(Frame):
 
         # self.scrollb.set(.1, 0.8)
         self.text.yview_moveto(0.5)
+
+
         # self.text.see(1)
         # print(self.scrollb.get())
 
@@ -270,7 +273,13 @@ class Window(Frame):
 
 root = Tk()
 
+def task():
+    # Run the backend code
+    realtime_interpreter.main()
 
 
 app = Window(root)
+root.after(2000, task)
 root.mainloop()
+
+print("Moving on..")
