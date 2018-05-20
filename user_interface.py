@@ -1,3 +1,4 @@
+import matplotlib as mpl
 from tkinter import *
 import tkinter
 from PIL import ImageTk, Image
@@ -27,6 +28,19 @@ imagepath = 'sample chart.png'
 
 
 class Window(Frame):
+    def update(self, position, wpm, volume):
+        print("Updating...")
+        self.past_wpm.append(wpm)
+        self.past_volume.append(volume)
+
+        img2 = ImageTk.PhotoImage(Image.open("rect1.png"))
+        self.Artwork.configure(image=img2)
+        self.Artwork.image = img2
+
+        img2 = ImageTk.PhotoImage(Image.open("rect2.png"))
+        self.Artwork1.configure(image=img2)
+        self.Artwork1.image = img2
+
     def __init__(self, master=None):
         self.root = master
         self.root.title("App")
@@ -41,6 +55,8 @@ class Window(Frame):
         self.labelframe = LabelFrame(self.root, text="", width=700, height= 1, bg= TEXTBOX_BG)
         self.labelframe.pack(fill=tkinter.Y, side=tkinter.RIGHT, expand=False)
 
+        self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,140,40))
+        self.dostuff.pack()
 
         # Bold font
         self.bold_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="bold")
@@ -154,13 +170,20 @@ class Window(Frame):
 
         self.labelframe_volumechart.pack(fill=tkinter.X, expand=False , padx = 0, pady = 0)
 
+
+
         self.past_wpm = []
         self.past_volume = []
 
+        self.update(0, 150, 150)
 
-    def update(self, words, wpm, volume):
-        self.past_wpm.append(wpm)
-        self.past_volume.append(volume)
+
+
+
+        os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
+        os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
+
+
 
 
 
