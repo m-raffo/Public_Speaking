@@ -26,6 +26,14 @@ COLOR_GOOD = "#15955f" # Green
 COLOR_WARN = "#c9bb00" # Yellow
 COLOR_BAD = "#ab0000" # Red
 
+
+
+MINWPM = 0
+
+MAXWPM = 1000
+
+
+
 speech = '''In ullamco praesentibus.
 
 Quorum voluptate appellat hic de tamen quamquam laboris, litteris labore illum  aut tamen o a enim mandaremus singulis. Quo eiusmod non cupidatat, an aliqua  domesticarum o probant te vidisse si nescius cillum fugiat laborum ipsum et eu iis firmissimum, quid consequat an distinguantur, quis te e legam aliquip et pariatur in offendit. Sint est si veniam quamquam.
@@ -61,20 +69,17 @@ imagepath = 'sample chart.png'
 class Window(Frame):
     def update(self, position, wpm, volume):
         # return None
-        wpm = clamp(wpm, 1, 19)
-        print("Updating...")
         print("Current wpm: {}".format(wpm))
+        wpm = clamp(wpm, MINWPM, MAXWPM)
+        print("Updating...")
+        print("Current wpm (clamped): {}".format(wpm))
+        print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
         self.past_wpm.append(wpm)
         self.past_volume.append(volume)
+        self.pace_value['text'] = '{} WPM'.format(int(wpm))
 
-        # past_wpm_str = []
-        # for i in self.past_wpm:
-        #     past_wpm_str.append(str(i))
-
-        # print("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
-        # os.system("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
-
-        plot.save_plot(self.past_wpm[-10:-1], 'rect1.png', 10, 0, 20)
+        self.wpm_average_history.append(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1]))
+        plot.save_plot(self.wpm_average_history[-10:-1], 'rect1.png', MAXWPM/  2.0, MINWPM, MAXWPM)
         # plot.save_plot(self.past_wpm, 'rect2.png', 5, 0, 10)
 
         # self.scrollb.set(.1, 0.8)
@@ -138,6 +143,7 @@ class Window(Frame):
 
         # Bold font
         self.bold_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="bold")
+
 
 
 
@@ -262,6 +268,7 @@ class Window(Frame):
 
 
         self.past_wpm = [10, 10, 10, 10,10,10,10,10,10,10,10,10,10,10,10,10,10]
+        self.wpm_average_history = [10, 10, 10, 10,10,10,10,10,10,10,10,10,10,10,10,10,10]
         self.past_volume = [150,150,150]
 
         # self.update(0, 150, 150)
@@ -292,7 +299,7 @@ def nonstop_update():
     while True:
         print("Updating.........")
         app.update(0,realtime_interpreter.get_wpm(),randint(1,5))
-        sleep(1)
+        sleep(0.2)
 
 
 # root.after(2000, task)

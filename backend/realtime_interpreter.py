@@ -16,8 +16,11 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./apicred.json"
 transcript_full = ""
 transcript_pending = ""
 wpm_current = 0
+realtime_wpm = 0
 
+expected_word = ""
 current_word_number = 0
+current_word_number_temporary_offset = 0
 scriptv = []
 # Instantiates a client
 # Audio recording parameters
@@ -102,8 +105,8 @@ class MicrophoneStream(object):
 # [END audio_stream]
 
 def get_wpm():
-    global wpm_current
-    return wpm_current
+    global realtime_wpm
+    return realtime_wpm
 
 def listen_print_loop(responses): #unused
     """Iterates through server responses and prints them.
@@ -155,7 +158,7 @@ def listen_print_loop(responses): #unused
                 break
             num_chars_printed = 0
 
-def word_chunky_thing(input_thing):
+'''def word_chunky_thing(input_thing):
     global last_time
     end = time.time()
     beg = last_time
@@ -165,7 +168,20 @@ def word_chunky_thing(input_thing):
 
     realtime_wpm = ((words_in_chunkie)/(end - beg))*60
 
-    print ("WPM: {}".format(realtime_wpm))
+    print (realtime_wpm)
+    return (realtime_wpm)'''
+
+def word_chunky_thingalt():
+    global last_time, realtime_wpm
+    end = time.time()
+    beg = last_time
+
+    realtime_wpm = ((1)/(end - beg))*60
+
+    print ("WPM result realtime: {}".format(realtime_wpm))
+
+    last_time =
+    
     return (realtime_wpm)
 
 def process_chunk(chunk_text):
@@ -173,13 +189,17 @@ def process_chunk(chunk_text):
     thing = chunk_text
 
     #athing(chunk_text)
-    wpm_current = word_chunky_thing(thing)
 
     current_word_number += len(chunk_text.split(' '))
+    #wpm_current = word_chunky_thing(thing)
 
 
+    #print (chunk_text)
 
-    print (chunk_text)
+#def process_mini_chunk(chunk_text):
+#    wpm_current = word_chunky_thingalt(thing)
+
+
 
 #APPLY FUCKING CORRECTIONS
 def apply_corrections(uncorrected_string, corrections):
@@ -204,10 +224,10 @@ def apply_corrections(uncorrected_string, corrections):
     return ' '.join(x for x in words)
 
 def gen_corrections(only_last, uncorrected_string):
-    global transcript_corrections
+    global transcript_corrections, expected_word
     words = uncorrected_string.split(' ')
     if only_last:
-        words_to_check = len(words)-1
+        words_to_check = [len(words)-1]
     else:
         words_to_check = range(0, len(words)-1)
 
@@ -227,7 +247,6 @@ def gen_corrections(only_last, uncorrected_string):
             o.new_string=expected_word
             #Add it to the list...
             transcript_corrections.append(o)
-        transcript_pending = cur_text
 
 def flush_unsure():
     global transcript_corrections, transcript_pending, transcript_full
@@ -249,7 +268,7 @@ def athing(inthing):
 def main():
     try:
     #if True:
-        global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number
+        global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number, current_word_number_temporary_offset, expected_word
         # See http://g.co/cloud/speech/docs/languages
         # for a list of supported languages.
         language_code = 'en-US'  # a BCP-47 language tag
@@ -273,41 +292,48 @@ def main():
             # Now, put the transcription responses to use.
             print ("Init.")
             #print("NO")
-            # with open("./script.txt", "r") as text_file:
-            #     scriptv = str(text_file.readlines()).split(' ')
+            with open("./script.txt", "r") as text_file:
+                scriptv = str(text_file.readlines()).split(' ')
                 #print(scriptv)
 
             #print("daddi")
-
-            expected_word = "hi"
+            expected_word="xxx_placeholder_xxx"
             for cur_response in responses:
-                try:
+                #SET expected_word
+                expected_word = scriptv[min(current_word_number+current_word_number_temporary_offset, len(scriptv)-1)]
+                if expected_word == None:
+                    expected_word = "xxx_placeholder_xxx"
+                    print ("nonerr: no expected_word foumd")
+                print ("expected_word: " + expected_word)
+                #try:
+                if True:
                     cur_text = str(cur_response.results[0].alternatives[0].transcript)
                     if cur_response.results[0].is_final:
                         transcript_corrections = []
+                        gen_corrections(False, cur_text)
                         process_chunk(cur_text)
                         transcript_full += apply_corrections(cur_text, transcript_corrections)
                         transcript_corrections = []
                         #transcript_full+=str(cur_text)
                     else:
                         #autocorrect based on script
+                        gen_corrections(True, cur_text)
+                        word_chunky_thingalt()
+                        current_word_number_temporary_offset += 1
+                        transcript_pending = apply_corrections(cur_text, transcript_corrections)
 
-                        transcript_pending = cur_text
 
-
-                except:
-                    print ("error: likely recieved and empty input")
+                #except:
+                #    print ("error: likely recieved and empty input")
 
                 #print("\n")
                 transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
                 print(transcript_full+transcript_pending)
     except KeyboardInterrupt:
         print ("\n bye felsha")
-    except Exception as e:
-        print ("Error: {}".format(e))
-        flush_unsure()
-        main()
-
-
+    #except Exception as e:
+    #    print ("timeout quickfix: " + str(e))
+    #    flush_unsure()
+    #    main()
 if __name__ == '__main__':
     main()
