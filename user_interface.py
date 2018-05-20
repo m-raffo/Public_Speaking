@@ -71,7 +71,6 @@ class Window(Frame):
         # print(line_count, word_count)
         line_count = line_count * 2 -1
         self.text.tag_add("BOLD", '{0}.{1}'.format(line_count, word_count), '{0}.{1}'.format(line_count, word_count+3))
-        self.text.tag_add("BOLD", '2.3', '2.8')
 
 
     def update(self, position, wpm, volume):
@@ -90,7 +89,7 @@ class Window(Frame):
         # plot.save_plot(self.past_wpm, 'rect2.png', 5, 0, 10)
 
         # self.scrollb.set(.1, 0.8)
-        self.text.yview_moveto(0.5)
+
 
 
         # self.text.see(1)
@@ -110,8 +109,8 @@ class Window(Frame):
 
 
         # Update by word number
-        bold_by_word_number(realtime_interpreter.get_word_number())
-
+        self.bold_by_word_number(realtime_interpreter.get_word_number())
+        # self.text.yview_moveto(0.5)
 
 
         # img2 = ImageTk.PhotoImage(Image.open("rect2.png"))
@@ -288,7 +287,6 @@ class Window(Frame):
         # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
 
 
-        self.bold_by_word_number(5)
 
 
 
