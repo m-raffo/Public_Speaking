@@ -10,7 +10,7 @@ SMOOTHING = 50
 # python3 plot.py 0 150 300 234,200,197,160,140
 
 
-last_y = None
+last_y = 0
 
 
 def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
@@ -51,7 +51,7 @@ def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
         x2 = scale(minofgraphx, maxofgraphx, 0, img.width, x2)
         y1 = scale(minofgraphy, maxofgraphy, 0, img.height, y1)
         y2 = scale(minofgraphy, maxofgraphy, 0, img.height, y2)
-        draw.line([x1, y1, x2, y2], fill=color, width=7)
+        draw.line([(x1, y1), (x2, y2)], fill=color, width=7)
 
         last_y = y2
 
@@ -82,31 +82,37 @@ def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
     power_smooth = spline(x,wpm,xnew)
 
     # print(power_smooth)
+    print ("SEttings: {}".format(wpm_settings))
 
     for x1, x2, y1,y2 in zip(xnew, xnew[1:], power_smooth, power_smooth[1:]):
 
         if (y1+y2) / 2.0 > wpm_settings [0]  and (y1+y2) / 2.0 <= wpm_settings [1]:
             plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#ff0000')
+            last_y = y2
 
 
 
         elif (y1+y2) / 2.0 >= wpm_settings [1] and (y1+y2) / 2.0 <= wpm_settings [2]:
             plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#c9cf00')
+            last_y = y2
 
 
 
         elif (y1+y2) / 2.0 >= wpm_settings [2] and (y1+y2) / 2.0 <= wpm_settings [3]:
             plot(x1, y1, x2, y2, 0,  max(xnew), upper_limit, lower_limit, '#009800')
+            last_y = y2
 
 
 
         elif (y1+y2) / 2.0 >= wpm_settings [3] and (y1+y2) / 2.0 <= wpm_settings [4]:
             plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#c9cf00')
+            last_y = y2
 
 
 
         elif (y1+y2) / 2.0 >= wpm_settings [4] and (y1+y2) / 2.0 <= wpm_settings [5]:
-            plot(x1, x2, y1, y2, 0, len(xnew), 0, len(power_smooth), '#ff0000')
+            plot(x1, y1, x2, y2, 0, max(xnew), upper_limit, lower_limit, '#ff0000')
+            last_y = y2
 
     total = img.height
     segment_amount = total / 5.0
@@ -127,7 +133,10 @@ def save_plot(wpm, path, best_wpm, lower_limit, upper_limit):
     draw.rectangle((0, settings[4], 20, settings[5]), fill='#ff0000')
 
     print(last_y)
-    draw.line((0,last_y,img.width, last_y), fill='#1a1a1a')
+
+    draw.line([(0,last_y),(img.width, last_y)], fill='#1a1a1a')
     # plot(0,xnew[-1], wpm[-1], wpm[-1], 0, max(xnew), 0, max(power_smooth), "#000000", )
     img = img.resize((495, 150), Image.ANTIALIAS)
     img.save(path)
+
+    img.close()

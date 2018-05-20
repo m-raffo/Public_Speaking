@@ -49,6 +49,8 @@ for i in speech_by_paragraph_raw:
 
 
 
+def clamp(n, minn, maxn):
+    return max(min(maxn, n), minn)
 
 
 
@@ -59,6 +61,7 @@ imagepath = 'sample chart.png'
 class Window(Frame):
     def update(self, position, wpm, volume):
         # return None
+        wpm = clamp(wpm, 1, 19)
         print("Updating...")
         print("Current wpm: {}".format(wpm))
         self.past_wpm.append(wpm)
@@ -72,7 +75,7 @@ class Window(Frame):
         # os.system("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
 
         plot.save_plot(self.past_wpm[-10:-1], 'rect1.png', 10, 0, 20)
-        plot.save_plot(self.past_wpm, 'rect2.png', 5, 0, 10)
+        # plot.save_plot(self.past_wpm, 'rect2.png', 5, 0, 10)
 
         # self.scrollb.set(.1, 0.8)
         self.text.yview_moveto(0.5)
@@ -90,6 +93,8 @@ class Window(Frame):
         img2 = ImageTk.PhotoImage(Image.open("rect1.png"))
         self.Artwork.configure(image=img2)
         self.Artwork.image = img2
+
+
 
         img2 = ImageTk.PhotoImage(Image.open("rect2.png"))
         self.Artwork1.configure(image=img2)
@@ -256,7 +261,7 @@ class Window(Frame):
 
 
 
-        self.past_wpm = [150, 150, 150]
+        self.past_wpm = [10, 10, 10, 10,10,10,10,10,10,10,10,10,10,10,10,10,10]
         self.past_volume = [150,150,150]
 
         # self.update(0, 150, 150)
@@ -278,15 +283,21 @@ root = Tk()
 def task():
     # Run the backend code
     print("Running main now...")
-    while True:
-        _thread.start_new_thread(realtime_interpreter.main, ())
-        sleep(65)
-        print("Starting now...")
-
-
+    _thread.start_new_thread(realtime_interpreter.main, ())
 app = Window(root)
+
+
+def nonstop_update():
+    print("RNNNINGININGINGIN")
+    while True:
+        print("Updating.........")
+        app.update(0,realtime_interpreter.get_wpm(),randint(1,5))
+        sleep(1)
+
+
 # root.after(2000, task)
 _thread.start_new_thread( task, () )
+_thread.start_new_thread( nonstop_update, () )
 root.mainloop()
 
 print("Moving on..")

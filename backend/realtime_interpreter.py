@@ -165,7 +165,7 @@ def word_chunky_thing(input_thing):
 
     realtime_wpm = ((words_in_chunkie)/(end - beg))*60
 
-    print (realtime_wpm)
+    print ("WPM: {}".format(realtime_wpm))
     return (realtime_wpm)
 
 def process_chunk(chunk_text):
@@ -273,8 +273,8 @@ def main():
             # Now, put the transcription responses to use.
             print ("Init.")
             #print("NO")
-            with open("./script.txt", "r") as text_file:
-                scriptv = str(text_file.readlines()).split(' ')
+            # with open("./script.txt", "r") as text_file:
+            #     scriptv = str(text_file.readlines()).split(' ')
                 #print(scriptv)
 
             #print("daddi")
@@ -303,9 +303,11 @@ def main():
                 print(transcript_full+transcript_pending)
     except KeyboardInterrupt:
         print ("\n bye felsha")
-    except:
-        print ("timeout quickfix")
+    except Exception as e:
+        print ("Error: {}".format(e))
         flush_unsure()
         main()
+
+
 if __name__ == '__main__':
     main()
