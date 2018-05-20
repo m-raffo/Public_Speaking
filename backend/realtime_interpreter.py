@@ -17,6 +17,7 @@ transcript_full = ""
 transcript_pending = ""
 wpm_current = 0
 
+current_word_number = 0
 scriptv = []
 # Instantiates a client
 # Audio recording parameters
@@ -162,17 +163,22 @@ def word_chunky_thing(input_thing):
 
     words_in_chunkie = len(chunkie.split(' '))
 
-    realtime_wpm = ((words_in_chunkie * 60)/(end - beg))
+    realtime_wpm = ((words_in_chunkie)/(end - beg))*60
 
     print (realtime_wpm)
     return (realtime_wpm)
 
 def process_chunk(chunk_text):
-    global wpm_current
+    global wpm_current, current_word_number
     thing = chunk_text
 
     #athing(chunk_text)
     wpm_current = word_chunky_thing(thing)
+
+    current_word_number += len(chunk_text.split(' '))
+
+
+
     print (chunk_text)
 
 #APPLY FUCKING CORRECTIONS
@@ -182,14 +188,16 @@ def apply_corrections(uncorrected_string, corrections):
     i = 0 #word index
     j = 0 #correction index
 
+
+
     while (i < len(words) and j < len(corrections)):
         if corrections[j].expected_index == i:
             if words[i] == corrections[j].old_string:
-                print("correction foumd")
+                #print("correction foumd")
                 words[i]=corrections[j].new_string
 
-            else:
-                print("Minor error: it seems the string has unexpectedly changed")
+            #else:
+                #print("Minor error: it seems the string has unexpectedly changed")
             j += 1
         else:
             i += 1
@@ -221,6 +229,13 @@ def gen_corrections(only_last, uncorrected_string):
             transcript_corrections.append(o)
         transcript_pending = cur_text
 
+def flush_unsure():
+    global transcript_corrections, transcript_pending, transcript_full
+    process_chunk(transcript_pending)
+    transcript_full += apply_corrections(transcript_pending, transcript_corrections)
+    transcript_corrections = []
+
+
 def athing(inthing):
     stuff = inthing
     blist = stuff.split()
@@ -229,59 +244,68 @@ def athing(inthing):
     for d in blist:
         for c in words:
             if c != d:
-                print(d + " this is wrong")
+                #print(d + " this is wrong")
                 break
 def main():
-    global transcript_full, transcript_pending, transcript_corrections, scriptv
-    # See http://g.co/cloud/speech/docs/languages
-    # for a list of supported languages.
-    language_code = 'en-US'  # a BCP-47 language tag
+    try:
+    #if True:
+        global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number
+        # See http://g.co/cloud/speech/docs/languages
+        # for a list of supported languages.
+        language_code = 'en-US'  # a BCP-47 language tag
 
-    client = speech.SpeechClient()
-    config = types.RecognitionConfig(
-        encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=RATE,
-        language_code=language_code)
-    streaming_config = types.StreamingRecognitionConfig(
-        config=config,
-        interim_results=True)
+        client = speech.SpeechClient()
+        config = types.RecognitionConfig(
+            encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=RATE,
+            language_code=language_code)
+        streaming_config = types.StreamingRecognitionConfig(
+            config=config,
+            interim_results=True)
 
-    with MicrophoneStream(RATE, CHUNK) as stream:
-        audio_generator = stream.generator()
-        requests = (types.StreamingRecognizeRequest(audio_content=content)
-                    for content in audio_generator)
+        with MicrophoneStream(RATE, CHUNK) as stream:
+            audio_generator = stream.generator()
+            requests = (types.StreamingRecognizeRequest(audio_content=content)
+                        for content in audio_generator)
 
-        responses = client.streaming_recognize(streaming_config, requests)
+            responses = client.streaming_recognize(streaming_config, requests)
 
-        # Now, put the transcription responses to use.
-        print ("Init.")
-        print("NO")
-        # with open("./script.txt", "r") as text_file:
-        #     sriptv = text_file.readlines()
-        #     print(sriptv)
+            # Now, put the transcription responses to use.
+            print ("Init.")
+            #print("NO")
+            with open("./script.txt", "r") as text_file:
+                scriptv = str(text_file.readlines()).split(' ')
+                #print(scriptv)
 
-        print("daddi")
+            #print("daddi")
 
-        expected_word = "emeel"
-        for cur_response in responses:
-            try:
-                cur_text = str(cur_response.results[0].alternatives[0].transcript)
-                if cur_response.results[0].is_final:
-                    transcript_corrections = []
-                    process_chunk(cur_text)
-                    transcript_full += apply_corrections(cur_text, transcript_corrections)
-                    transcript_corrections = []
-                    #transcript_full+=str(cur_text)
-                else:
-                    #autocorrect based on script
+            expected_word = "hi"
+            for cur_response in responses:
+                try:
+                    cur_text = str(cur_response.results[0].alternatives[0].transcript)
+                    if cur_response.results[0].is_final:
+                        transcript_corrections = []
+                        process_chunk(cur_text)
+                        transcript_full += apply_corrections(cur_text, transcript_corrections)
+                        transcript_corrections = []
+                        #transcript_full+=str(cur_text)
+                    else:
+                        #autocorrect based on script
 
-                    transcript_pending = cur_text
+                        transcript_pending = cur_text
 
-            except:
-                print ("error: likely recieved and empty input")
 
-            print(wpm_current)
-            transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
-            #print(transcript_full+transcript_pending)
+                except:
+                    print ("error: likely recieved and empty input")
+
+                #print("\n")
+                transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
+                print(transcript_full+transcript_pending)
+    except KeyboardInterrupt:
+        print ("\n bye felsha")
+    except:
+        print ("timeout quickfix")
+        flush_unsure()
+        main()
 if __name__ == '__main__':
     main()
