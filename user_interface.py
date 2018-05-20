@@ -210,7 +210,7 @@ class Window(Frame):
         self.speed_tip = Label(self.labelframe_tips, text= "Slow down a bit", fg=COLOR_WARN, font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = WINDOW_BG)
 
 
-        self.volume_tip.pack(fill=tkinter.X, expand=False)
+        # self.volume_tip.pack(fill=tkinter.X, expand=False)
         self.speed_tip.pack(fill=tkinter.X, expand=False)
 
         self.spaceholder1 = Frame(self.labelframe, bg = TEXTBOX_BG)
