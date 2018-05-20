@@ -31,7 +31,9 @@ Quorum voluptate appellat hic de tamen quamquam laboris, litteris labore illum  
 
 Do illum proident concursionibus ad fore fabulas iis appellat. Est dolore appellat distinguantur, se ne arbitrantur, fabulas irure ullamco arbitror, mandaremus ne arbitror non nostrud si quorum, est dolore deserunt expetendis, veniam ad consequat si summis et export senserit si litteris.
 
-Veniam sed probant iis noster in fabulas duis magna nostrud anim non singulis elit malis est multos aut id malis cernantur tractavissent, dolore comprehenderit laborum elit offendit, qui sint nescius proident, quamquam quo dolore admodum, officia illum te probant fidelissimae.'''
+Veniam sed probant iis noster in fabulas duis magna nostrud anim non singulis elit malis est multos aut id malis cernantur tractavissent, dolore comprehenderit laborum elit offendit, qui sint nescius proident, quamquam quo dolore admodum, officia illum te probant fidelissimae.
+
+''' * 6
 
 
 speech_by_paragraph_raw = speech.split('\n')
@@ -68,6 +70,10 @@ class Window(Frame):
 
         plot.save_plot(self.past_wpm[-10:-1], 'rect1.png', 150, 0, 300)
         plot.save_plot(self.past_wpm, 'rect2.png', 150, 0, 300)
+
+        self.scrollb.set(.1, 0.8)
+        # self.text.see(1)
+        # print(self.scrollb.get())
 
 
         # os.system("python3 plot.py 0 150 300 {} rect2.png 140".format(str.join(',',past_wpm_str)))
@@ -126,6 +132,11 @@ class Window(Frame):
 
 
         self.text = Text(self.speechtext, wrap=WORD, bg= '#ffffff', font=(DEFAULT_FONT, DEFAULT_FONT_SIZE), fg = "#4f4f4f")
+
+        self.scrollb = Scrollbar(self.speechtext, command=self.text.yview)
+        self.scrollb.pack( fill=Y, side = RIGHT)
+        self.text['yscrollcommand'] = self.scrollb.set
+
 
         self.text.config(state=DISABLED)
 
