@@ -33,7 +33,7 @@ CHUNK = int(RATE / 10)  # 100ms !!!!THIS IS NOT OUR VARIABLE!!!!
 last_time = time.time()
 prompt = 'test'#input("write prompt here")
 words = prompt.split(",")
-print(words)
+#print(words)
 
 class correction:
     expected_index=0
@@ -153,7 +153,7 @@ def listen_print_loop(responses): #unused
             num_chars_printed = len(transcript)
 
         else:
-            print(transcript + overwrite_chars)
+            #print(transcript + overwrite_chars)
 
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
@@ -192,12 +192,12 @@ def word_chunky_thingalt():
         counter += 1
         data_crunched.append(i - wpm_difference_list[counter-1])
 
-    print(data_crunched)
+    #print(data_crunched)
 
     # wpm_difference_list.append(((1)/(enxd - beg))*60)
 
 
-    print ("WPM average realtime: {}\n".format(float(sum(data_crunched[-6:-1]))/len(data_crunched[-6:-1])* 600))
+    #print ("WPM average realtime: {}\n".format(float(sum(data_crunched[-6:-1]))/len(data_crunched[-6:-1])* 600))
     # print(wpm_difference_list)
 
     # last_time =
@@ -206,6 +206,7 @@ def word_chunky_thingalt():
 
 def process_chunk(chunk_text):
     global wpm_current, current_word_number
+    #print ("SCREAMMMMM!MM!M!M!M!M!!M")
     thing = chunk_text
 
     #athing(chunk_text)
@@ -214,10 +215,7 @@ def process_chunk(chunk_text):
     #wpm_current = word_chunky_thing(thing)
 
 
-    #print (chunk_text)
-
-#def process_mini_chunk(chunk_text):
-#    wpm_current = word_chunky_thingalt(thing)
+    print ("F_: " + chunk_text)
 
 
 
@@ -235,16 +233,17 @@ def apply_corrections(uncorrected_string, corrections):
             if words[i] == corrections[j].old_string:
                 #print("correction foumd")
                 words[i]=corrections[j].new_string
-
             #else:
                 #print("Minor error: it seems the string has unexpectedly changed")
             j += 1
         else:
             i += 1
+    #print("pre"+' '.join(x for x in words))
     return ' '.join(x for x in words)
 
 def gen_corrections(only_last, uncorrected_string):
-    global transcript_corrections, expected_word
+    global transcript_corrections, expected_word, current_word_number_temporary_offset
+    current_word_number_temporary_offset = -1
     words = uncorrected_string.split(' ')
     if only_last:
         words_to_check = [len(words)-1]
@@ -252,10 +251,13 @@ def gen_corrections(only_last, uncorrected_string):
         words_to_check = range(0, len(words)-1)
 
     for i in words_to_check:
+        set_expected_word()
+        current_word_number_temporary_offset +=1
         found_correction=False #initial value
         #Perform a phonetic comparision
         if (jellyfish.match_rating_comparison(words[i],expected_word)):
             found_correction=True #if its close indicate the correction to be made
+            #print("corgen")
 
         if found_correction:
             #Replace the actual word in the list, and store to intrim
@@ -267,6 +269,14 @@ def gen_corrections(only_last, uncorrected_string):
             o.new_string=expected_word
             #Add it to the list...
             transcript_corrections.append(o)
+
+def set_expected_word():
+    global current_word_number, current_word_number_temporary_offset, scriptv, expected_word
+    expected_word = scriptv[min(current_word_number+current_word_number_temporary_offset, len(scriptv)-1)]
+    if expected_word == None:
+        expected_word = "xxx_placeholder_xxx"
+        #print ("nonerr: no expected_word foumd")
+    #print ("expected_word: " + expected_word)
 
 def flush_unsure():
     global transcript_corrections, transcript_pending, transcript_full
@@ -323,8 +333,8 @@ def main():
                 expected_word = scriptv[min(current_word_number+current_word_number_temporary_offset, len(scriptv)-1)]
                 if expected_word == None:
                     expected_word = "xxx_placeholder_xxx"
-                    print ("nonerr: no expected_word foumd")
-                print ("expected_word: " + expected_word)
+                    #print ("nonerr: no expected_word foumd")
+                #print ("expected_word: " + expected_word)
                 #try:
                 if True:
                     cur_text = str(cur_response.results[0].alternatives[0].transcript)
@@ -348,12 +358,13 @@ def main():
 
                 #print("\n")
                 transcript_pending = apply_corrections(transcript_pending, transcript_corrections)
-                print(transcript_full+transcript_pending)
+                #print(transcript_full+transcript_pending)
     except KeyboardInterrupt:
         print ("\n bye felsha")
-    #except Exception as e:
-    #    print ("timeout quickfix: " + str(e))
-    #    flush_unsure()
-    #    main()
+    except Exception as e:
+        #print ("timeout quickfix: " + str(e))
+        print ("timeout restart")
+        flush_unsure()
+        main()
 if __name__ == '__main__':
     main()
