@@ -200,6 +200,10 @@ def word_chunky_thingalt():
     # last_time =
 
     # return (realtime_wpm)
+def get_word_number():
+    global current_word_number, current_word_number_temporary_offset
+    return current_word_number + current_word_number_temporary_offset
+
 
 def process_chunk(chunk_text):
     global wpm_current, current_word_number
