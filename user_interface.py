@@ -4,6 +4,7 @@ import tkinter
 from PIL import ImageTk, Image
 from tkinter.font import Font
 import os
+from random import randint
 
 
 os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
@@ -33,6 +34,14 @@ class Window(Frame):
         self.past_wpm.append(wpm)
         self.past_volume.append(volume)
 
+        past_wpm_str = []
+        for i in self.past_wpm:
+            past_wpm_str.append(str(i))
+
+        os.system("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
+        print("python3 plot.py 0 150 300 {} rect1.png 140".format(str.join(',',past_wpm_str)))
+
+
         img2 = ImageTk.PhotoImage(Image.open("rect1.png"))
         self.Artwork.configure(image=img2)
         self.Artwork.image = img2
@@ -55,7 +64,7 @@ class Window(Frame):
         self.labelframe = LabelFrame(self.root, text="", width=700, height= 1, bg= TEXTBOX_BG)
         self.labelframe.pack(fill=tkinter.Y, side=tkinter.RIGHT, expand=False)
 
-        self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,140,40))
+        self.dostuff = Button(self.labelframe, text="update!", command=lambda: self.update(0,randint(0,150),randint(0,150)))
         self.dostuff.pack()
 
         # Bold font
@@ -172,8 +181,8 @@ class Window(Frame):
 
 
 
-        self.past_wpm = []
-        self.past_volume = []
+        self.past_wpm = [150, 150, 150]
+        self.past_volume = [150,150,150]
 
         self.update(0, 150, 150)
 

@@ -15,8 +15,11 @@ import sys
 
 
 
-
 def save_plot(wpm_list, path):
+
+    img = Image.new('RGB', (495, 200), color = '#ffffff')
+    draw = ImageDraw.Draw(img)
+
     def get_wpm_settings(wpm_aim, lower, upper):
         total = upper
         segment_amount = total / 5.0
@@ -26,6 +29,18 @@ def save_plot(wpm_list, path):
             settings.append(segment_amount * i)
 
         return settings
+
+    def scale(min, max, newmin, newmax,  value):
+        return ((float(value) - float(min)) / (float(max) - float(min))) * (float(newmax) - float(newmin)) + float(newmin)
+
+    def plot(x1, y1, x2, y2, minofgraphx, maxofgraphx, minofgraphy, maxofgraphy):
+        x1 = scale(minofgraphx, maxofgraphx, 0, img.width, x1)
+        x2 = scale(minofgraphx, maxofgraphx, 0, img.width, x2)
+        y1 = scale(minofgraphy, maxofgraphy, 0, img.height, y1)
+        y2 = scale(minofgraphy, maxofgraphy, 0, img.height, y2)
+        draw.line([x1, y1, x2, y2], fill='#000000', width=3)
+
+
 
     best_wpm = int(sys.argv[2])
     lower_limit = int(sys.argv[1])
