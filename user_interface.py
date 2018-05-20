@@ -90,8 +90,34 @@ class Window(Frame):
 
         # self.scrollb.set(.1, 0.8)
 
+        wpm_settings = plot.get_wpm_settings_outside(MAXWPM / 2.0, MINWPM, MAXWPM)
+        print(wpm_settings)
+
+        if wpm > wpm_settings [0]  and wpm / 2.0 <= wpm_settings [1]:
+            self.pace_tip['text'] = "Bad"
 
 
+
+        elif wpm >= wpm_settings [1] and wpm / 2.0 <= wpm_settings [2]:
+            self.pace_tip['text'] = "meh"
+
+
+
+        elif wpm >= wpm_settings [2] and wpm / 2.0 <= wpm_settings [3]:
+            self.pace_tip['text'] = "good"
+
+
+
+        elif wpm >= wpm_settings [3] and wpm / 2.0 <= wpm_settings [4]:
+            self.pace_tip['text'] = "meh"
+
+
+
+        elif wpm >= wpm_settings [4] and wpm / 2.0 <= wpm_settings [5]:
+            self.pace_tip['text'] = "Bad"
+
+        else:
+            self.pace_tip['text'] = "asldkfjlaksjf"
         # self.text.see(1)
         # print(self.scrollb.get())
 
@@ -210,7 +236,7 @@ class Window(Frame):
         self.speed_tip = Label(self.labelframe_tips, text= "Slow down a bit", fg=COLOR_WARN, font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),  bg = WINDOW_BG)
 
 
-        # self.volume_tip.pack(fill=tkinter.X, expand=False)
+        # self.volumetip.pack(fill=tkinter.X, expand=False)
         self.speed_tip.pack(fill=tkinter.X, expand=False)
 
         self.spaceholder1 = Frame(self.labelframe, bg = TEXTBOX_BG)
