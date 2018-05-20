@@ -17,6 +17,7 @@ transcript_full = ""
 transcript_pending = ""
 wpm_current = 0
 
+expected_word = ""
 current_word_number = 0
 current_word_number_temporary_offset = 0
 scriptv = []
@@ -169,17 +170,16 @@ def listen_print_loop(responses): #unused
     print (realtime_wpm)
     return (realtime_wpm)'''
 
-def word_chunky_thingalt(input_thing):
+def word_chunky_thingalt():
     global last_time
     end = time.time()
     beg = last_time
-    chunkie = input_thing
-
-    words_in_chunkie = len(chunkie.split(' '))
 
     realtime_wpm = ((1)/(end - beg))*60
 
-    print (realtime_wpm)
+    print ("WPM result realtime: {}".format(realtime_wpm))
+
+    last_time = end
     return (realtime_wpm)
 
 def process_chunk(chunk_text):
@@ -221,7 +221,7 @@ def apply_corrections(uncorrected_string, corrections):
     return ' '.join(x for x in words)
 
 def gen_corrections(only_last, uncorrected_string):
-    global transcript_corrections
+    global transcript_corrections, expected_word
     words = uncorrected_string.split(' ')
     if only_last:
         words_to_check = [len(words)-1]
@@ -244,7 +244,6 @@ def gen_corrections(only_last, uncorrected_string):
             o.new_string=expected_word
             #Add it to the list...
             transcript_corrections.append(o)
-        transcript_pending = cur_text
 
 def flush_unsure():
     global transcript_corrections, transcript_pending, transcript_full
@@ -266,7 +265,7 @@ def athing(inthing):
 def main():
     try:
     #if True:
-        global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number, current_word_number_temporary_offset
+        global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number, current_word_number_temporary_offset, expected_word
         # See http://g.co/cloud/speech/docs/languages
         # for a list of supported languages.
         language_code = 'en-US'  # a BCP-47 language tag
@@ -297,7 +296,11 @@ def main():
             #print("daddi")
             expected_word="xxx_placeholder_xxx"
             for cur_response in responses:
-                expected_word = scriptv[current_word_number+current_word_number_temporary_offset]
+                #SET expected_word
+                expected_word = scriptv[min(current_word_number+current_word_number_temporary_offset, len(scriptv)-1)]
+                if expected_word == None:
+                    expected_word = "xxx_placeholder_xxx"
+                    print ("nonerr: no expected_word foumd")
                 print ("expected_word: " + expected_word)
                 #try:
                 if True:
@@ -312,6 +315,8 @@ def main():
                     else:
                         #autocorrect based on script
                         gen_corrections(True, cur_text)
+                        word_chunky_thingalt()
+                        current_word_number_temporary_offset += 1
                         transcript_pending = apply_corrections(cur_text, transcript_corrections)
 
 
