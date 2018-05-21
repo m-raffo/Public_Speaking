@@ -35,6 +35,11 @@ MINWPM = 0
 MAXWPM = 300 #fast/minute
 
 
+# Create and save new image to rect1.png to prevent errors if the file becomes corrupted
+
+img = Image.new("RGB", (495, 150), '#ffffff')
+img.save("rect1.png")
+
 
 with open("./script.txt", "r") as text_file:
     speech = str.join('\n',text_file.readlines())
