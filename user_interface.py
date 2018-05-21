@@ -167,7 +167,7 @@ class Window(Frame):
 
         # Update by word number
         #print("hi____"+str(num_words))
-        self.bold_by_word_number(num_words)
+        # self.bold_by_word_number(num_words)
         # self.text.yview_moveto(0.5)
 
 
