@@ -18,8 +18,11 @@ transcript_pending = ""
 wpm_current = 0
 realtime_wpm = 0
 
+<<<<<<< HEAD:backend/realtime_interpreter.py
 start = time.time()
 
+=======
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
 expected_word = ""
 current_word_number = 0
 current_word_number_temporary_offset = 0
@@ -109,8 +112,13 @@ class MicrophoneStream(object):
 # [END audio_stream]
 
 def get_wpm():
+<<<<<<< HEAD:backend/realtime_interpreter.py
     global realtime_wpm, data_crunched
     return float(sum(data_crunched[-6:-1]))/len(data_crunched[-6:-1])* 600
+=======
+    global realtime_wpm
+    return realtime_wpm
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
 
 def listen_print_loop(responses): #unused
     """Iterates through server responses and prints them.
@@ -172,6 +180,7 @@ def listen_print_loop(responses): #unused
     print (realtime_wpm)
     return (realtime_wpm)'''
 
+<<<<<<< HEAD:backend/realtime_interpreter.py
 wpm_difference_list = [54, 45, 45,45 ,34, 23,42]
 
 def word_chunky_thingalt():
@@ -179,6 +188,12 @@ def word_chunky_thingalt():
     end = time.time()
     beg = last_time
 
+=======
+def word_chunky_thingalt():
+    global last_time
+    end = time.time()
+    beg = last_time
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
 
     wpm_difference_list.append(time.time() - start)
 
@@ -204,6 +219,13 @@ def get_word_number():
     global wordno_store
     return round(wordno_store)
 
+<<<<<<< HEAD:backend/realtime_interpreter.py
+=======
+    print ("WPM result realtime: {}".format(realtime_wpm))
+
+    last_time = end
+    return (realtime_wpm)
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
 
 def process_chunk(chunk_text):
     global wpm_current, current_word_number
@@ -218,6 +240,12 @@ def process_chunk(chunk_text):
 
     print ("F_: " + chunk_text)
 
+<<<<<<< HEAD:backend/realtime_interpreter.py
+=======
+#def process_mini_chunk(chunk_text):
+#    wpm_current = word_chunky_thingalt(thing)
+
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
 
 
 #APPLY FUCKING CORRECTIONS
@@ -243,9 +271,13 @@ def apply_corrections(uncorrected_string, corrections):
     return ' '.join(x for x in words)
 
 def gen_corrections(only_last, uncorrected_string):
+<<<<<<< HEAD:backend/realtime_interpreter.py
     global transcript_corrections, expected_word, current_word_number_temporary_offset
     if not only_last:
         current_word_number_temporary_offset = -1 #-1?
+=======
+    global transcript_corrections, expected_word
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
     words = uncorrected_string.split(' ')
     if only_last:
         words_to_check = [len(words)-1]
@@ -271,6 +303,7 @@ def gen_corrections(only_last, uncorrected_string):
             o.new_string=expected_word
             #Add it to the list...
             transcript_corrections.append(o)
+<<<<<<< HEAD:backend/realtime_interpreter.py
 
 def set_expected_word():
     global current_word_number, current_word_number_temporary_offset, scriptv, expected_word
@@ -279,6 +312,8 @@ def set_expected_word():
         expected_word = "xxx_placeholder_xxx"
         #print ("nonerr: no expected_word foumd")
     #print ("expected_word: " + expected_word)
+=======
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
 
 def flush_unsure():
     global transcript_corrections, transcript_pending, transcript_full
@@ -300,7 +335,11 @@ def athing(inthing):
 def main():
     try:
     #if True:
+<<<<<<< HEAD:backend/realtime_interpreter.py
         global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number, current_word_number_temporary_offset, expected_word, wordno_store
+=======
+        global transcript_full, transcript_pending, transcript_corrections, scriptv, current_word_number, current_word_number_temporary_offset, expected_word
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
         # See http://g.co/cloud/speech/docs/languages
         # for a list of supported languages.
         language_code = 'en-US'  # a BCP-47 language tag
@@ -335,10 +374,17 @@ def main():
                 expected_word = scriptv[min(current_word_number+current_word_number_temporary_offset, len(scriptv)-1)]
                 if expected_word == None:
                     expected_word = "xxx_placeholder_xxx"
+<<<<<<< HEAD:backend/realtime_interpreter.py
                     #print ("nonerr: no expected_word foumd")
                 #print ("expected_word: " + expected_word)
                 try:
                 #if True:
+=======
+                    print ("nonerr: no expected_word foumd")
+                print ("expected_word: " + expected_word)
+                #try:
+                if True:
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
                     cur_text = str(cur_response.results[0].alternatives[0].transcript)
                     if cur_response.results[0].is_final:
                         transcript_corrections = []
@@ -352,7 +398,10 @@ def main():
                         gen_corrections(True, cur_text)
                         word_chunky_thingalt()
                         current_word_number_temporary_offset += 1
+<<<<<<< HEAD:backend/realtime_interpreter.py
                         #print (current_word_number_temporary_offset)
+=======
+>>>>>>> 25299e0b2e9ec939a722ca1fb00f7c6706c2f78d:realtime_interpreter.py
                         transcript_pending = apply_corrections(cur_text, transcript_corrections)
                 except:
                     break
