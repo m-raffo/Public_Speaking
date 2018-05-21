@@ -337,8 +337,8 @@ def main():
                     expected_word = "xxx_placeholder_xxx"
                     #print ("nonerr: no expected_word foumd")
                 #print ("expected_word: " + expected_word)
-                #try:
-                if True:
+                try:
+                #if True:
                     cur_text = str(cur_response.results[0].alternatives[0].transcript)
                     if cur_response.results[0].is_final:
                         transcript_corrections = []
@@ -354,9 +354,8 @@ def main():
                         current_word_number_temporary_offset += 1
                         #print (current_word_number_temporary_offset)
                         transcript_pending = apply_corrections(cur_text, transcript_corrections)
-
-
-                #except:
+                except:
+                    break
                 #    print ("error: likely recieved and empty input")
 
                 #print("\n")
@@ -365,10 +364,10 @@ def main():
                 #print (wordno_store)
                 #print(transcript_full+transcript_pending)
     except KeyboardInterrupt:
-        print ("\n bye felsha")
+        print ("\n Bye bye!")
     except Exception as e:
-        #print ("timeout quickfix: " + str(e))
-        print ("timeout restart")
+        print ("timeout quickfix: " + str(e))
+        #print ("timeout restart")
         flush_unsure()
         main()
 if __name__ == '__main__':

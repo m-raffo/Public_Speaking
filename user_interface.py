@@ -82,7 +82,7 @@ class Window(Frame):
         else:
             self.text.tag_remove("0.0", badglob)
         badglob = str(k)+"."+str(j+10)
-        print (badglob)
+        #print (badglob)
         self.text.tag_add("BOLD", "0.0", str(k)+"."+str(j+10))
         #self.text.tag_remove("BOLD", str(k)+"."+str(j+5))
 
@@ -90,10 +90,18 @@ class Window(Frame):
     def update(self, position, wpm, volume):
         # return None
         # print("Current wpm: {}".format(wpm))
-        optimalwpmc = (MAXWPM + MINWPM)/2
-        wpm = realtime_interpreter.get_wpm()
-        wpm = (wpm-optimalwpmc)/1.5 + optimalwpmc
-        wpm = clamp(MAXWPM - wpm, MINWPM, MAXWPM)
+        optimal_wpm = (MAXWPM + MINWPM)/2
+        wpm = realtime_interpreter.get_wpm() #grab wpm value
+        #process wpm value
+        wpm -= optimal_wpm
+        wpm *= 0.2
+        if wpm > 0:
+            wpm = abs(wpm ** 1.5)
+        else:
+            wpm = -abs(wpm ** 1.5)
+
+        wpm += optimal_wpm
+        wpm = clamp(MAXWPM - wpm, MINWPM, MAXWPM) #clamp it
         # print("Updating...")
         # print("Current wpm (clamped): {}".format(wpm))
         # print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
@@ -347,7 +355,7 @@ root = Tk()
 
 def task():
     # Run the backend code
-    print("Running main now...")
+    #print("Running main now...")
     _thread.start_new_thread(realtime_interpreter.main, ())
 app = Window(root)
 
