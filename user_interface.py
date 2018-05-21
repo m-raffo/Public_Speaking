@@ -57,7 +57,9 @@ def clamp(n, minn, maxn):
 imagepath = 'sample chart.png'
 
 
+
 class Window(Frame):
+    # The frame window for the program
     def bold_by_word_number(self, word_count):
         global badglob, bagblobooler
         '''line_count, word_count = self.get_index_by_word_number(speech, word_count)
