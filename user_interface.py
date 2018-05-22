@@ -10,8 +10,8 @@ from time import sleep
 
 from backend import realtime_interpreter
 
-# os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
-# os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
+# os.system("python3 plot.py 0 150 300 234,200,197,160,140 pace_graph.png 140")
+# os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 volume_graph.png 120")
 
 badglob = "0.0"
 bagblobooler = False
@@ -35,10 +35,15 @@ MINWPM = 0
 MAXWPM = 300 #fast/minute
 
 
-# Create and save new image to rect1.png to prevent errors if the file becomes corrupted
+# Create and save new image to pace_graph.png to prevent errors if the file becomes corrupted
 
 img = Image.new("RGB", (495, 150), '#ffffff')
-img.save("rect1.png")
+img.save("pace_graph.png")
+
+img = Image.new("RGB", (495, 150), '#ffffff')
+img.save("volume_graph.png")
+
+del img
 
 
 with open("./script.txt", "r") as text_file:
@@ -117,8 +122,8 @@ class Window(Frame):
         self.pace_value['text'] = ""#'{} WPM'.format(int(wpm))
 
         self.wpm_average_history.append(float(sum(self.past_wpm[-3:-1]))/len(self.past_wpm[-3:-1]))
-        plot.save_plot(self.wpm_average_history[-10:-1], 'rect1.png', MAXWPM/  2.0, MINWPM, MAXWPM)
-        # plot.save_plot(self.past_wpm, 'rect2.png', 5, 0, 10)
+        plot.save_plot(self.wpm_average_history[-10:-1], 'pace_graph.png', MAXWPM/  2.0, MINWPM, MAXWPM)
+        # plot.save_plot(self.past_wpm, 'volume_graph.png', 5, 0, 10)
 
         # self.scrollb.set(.1, 0.8)
 
@@ -160,12 +165,12 @@ class Window(Frame):
         # print(self.scrollb.get())
 
 
-        # os.system("python3 plot.py 0 150 300 {} rect2.png 140".format(str.join(',',past_wpm_str)))
+        # os.system("python3 plot.py 0 150 300 {} volume_graph.png 140".format(str.join(',',past_wpm_str)))
 
 #
         # print("Done computing...")
 
-        img2 = ImageTk.PhotoImage(Image.open("rect1.png"))
+        img2 = ImageTk.PhotoImage(Image.open("pace_graph.png"))
         self.Artwork.configure(image=img2)
         self.Artwork.image = img2
 
@@ -178,7 +183,7 @@ class Window(Frame):
         # self.text.yview_moveto(0.5)
 
 
-        # img2 = ImageTk.PhotoImage(Image.open("rect2.png"))
+        # img2 = ImageTk.PhotoImage(Image.open("volume_graph.png"))
         # self.Artwork1.configure(image=img2)
         # self.Artwork1.image = img2
 
@@ -303,7 +308,7 @@ class Window(Frame):
 
 
         # self.photo = ImageTk.PhotoImage(Image.open('sample chart.png'))
-        self.photo = ImageTk.PhotoImage(Image.open('rect1.png'))
+        self.photo = ImageTk.PhotoImage(Image.open('pace_graph.png'))
         self.Artwork = Label(self.labelframe_pacechart, image=self.photo)
         self.Artwork.photo = self.photo
         self.Artwork.pack()
@@ -332,7 +337,7 @@ class Window(Frame):
         # self.labelframe_volumechart = Frame(self.labelframe, width=1, height= 1, bg = TEXTBOX_BG)
         #
         #
-        # self.photo1 = ImageTk.PhotoImage(Image.open('rect2.png'))
+        # self.photo1 = ImageTk.PhotoImage(Image.open('volume_graph.png'))
         # self.Artwork1 = Label(self.labelframe_volumechart, image=self.photo1)
         # self.Artwork1.photo = self.photo1
         # self.Artwork1.pack()
@@ -343,15 +348,17 @@ class Window(Frame):
 
         self.past_wpm = [10, 10, 10, 10,10,10,10,10,10,10,10,10,10,10,10,10,10]
         self.wpm_average_history = [10, 10, 10, 10,10,10,10,10,10,10,10,10,10,10,10,10,10]
+
         self.past_volume = [150,150,150]
+        self.volume_average_history = [150, 150, 150, 150]
 
         # self.update(0, 150, 150)
 
 
 
 
-        # os.system("python3 plot.py 0 150 300 234,200,197,160,140 rect1.png 140")
-        # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 rect2.png 120")
+        # os.system("python3 plot.py 0 150 300 234,200,197,160,140 pace_graph.png 140")
+        # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 volume_graph.png 120")
 
 
 
