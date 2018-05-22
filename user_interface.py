@@ -29,6 +29,7 @@ COLOR_WARN = "#c9bb00" # Yellow
 COLOR_BAD = "#ab0000" # Red
 
 frame_count=0 #DELME
+enable_graphing=False
 
 MINWPM = 0
 
@@ -110,24 +111,26 @@ class Window(Frame):
         optimal_wpm = (MAXWPM + MINWPM)/2
         wpm = realtime_interpreter.get_wpm() #grab wpm value
         #process wpm value
-        wpm -= optimal_wpm
+        '''wpm -= optimal_wpm
         wpm *= 0.2
         if wpm > 0:
             wpm = abs(wpm ** 1.5)
         else:
             wpm = -abs(wpm ** 1.5)
 
-        wpm += optimal_wpm
+        wpm += optimal_wpm'''
         wpm = clamp(MAXWPM - wpm, MINWPM, MAXWPM) #clamp it
         # print("Updating...")
         # print("Current wpm (clamped): {}".format(wpm))
         # print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
-        self.past_wpm.append(wpm)
+        if enable_graphing:
+            self.past_wpm.append(wpm)
         # self.past_volume.append(volume)
         self.pace_value['text'] = frame_count#'{} WPM'.format(int(wpm))
 
-        self.wpm_average_history.append(float(sum(self.past_wpm[-3:-1]))/len(self.past_wpm[-3:-1]))
-        plot.save_plot(self.wpm_average_history[-10:-1], 'pace_graph.png', MAXWPM/  2.0, MINWPM, MAXWPM)
+        if enable_graphing:
+            self.wpm_average_history.append(float(sum(self.past_wpm[-3:-1]))/len(self.past_wpm[-3:-1]))
+            plot.save_plot(self.wpm_average_history[-10:-1], 'pace_graph.png', MAXWPM/  2.0, MINWPM, MAXWPM)
         # plot.save_plot(self.past_wpm, 'volume_graph.png', 5, 0, 10)
 
         # self.scrollb.set(.1, 0.8)
@@ -374,7 +377,7 @@ class Window(Frame):
 
 root = Tk()
 
-def task():
+def start_threads():
     # Run the backend code
     #print("Running main now...")
     _thread.start_new_thread(realtime_interpreter.main, ())
@@ -388,11 +391,13 @@ def nonstop_update():
         i+=1
         # print("Updating.........")
         app.update(0,realtime_interpreter.get_wpm(),randint(1,5))
-        sleep(0.25)
+        #app.update(0,1,1) debugbad
+        sleep(0.05)
 
 
 # root.after(2000, task)
-_thread.start_new_thread( task, () )
+start_threads()
+#_thread.start_new_thread( task, () )
 _thread.start_new_thread( nonstop_update, () )
 root.mainloop()
 
