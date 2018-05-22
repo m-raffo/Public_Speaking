@@ -21,7 +21,7 @@ realtime_wpm = 0
 start = time.time()
 
 expected_word = ""
-current_word_number = 0
+current_word_number = 1
 current_word_number_temporary_offset = 0
 scriptv = []
 
@@ -112,56 +112,6 @@ def get_wpm():
     global realtime_wpm, data_crunched
     return float(sum(data_crunched[-6:-1]))/len(data_crunched[-6:-1])* 600
 
-def listen_print_loop(responses): #unused
-    """Iterates through server responses and prints them.
-    The responses passed is a generator that will block until a response
-    is provided by the server.
-    Each response may contain multiple results, and each result may contain
-    multiple alternatives; for details, see https://goo.gl/tjCPAU.  Here we
-    print only the transcription for the top alternative of the top result.
-    In this case, responses are provided for interim results as well. If the
-    response is an interim one, print a line feed at the end of it, to allow
-    the next result to overwrite it, until the response is a final one. For the
-    final one, print a newline to preserve the finalized transcription.
-    """
-    num_chars_printed = 0
-    for response in responses:
-        if not response.results:
-            continue
-
-        # The `results` list is consecutive. For streaming, we only care about
-        # the first result being considered, since once it's `is_final`, it
-        # moves on to considering the next utterance.
-        result = response.results[0]
-        if not result.alternatives:
-            continue
-
-        # Display the transcription of the top alternative.
-        transcript = result.alternatives[0].transcript
-
-        # Display interim results, but with a carriage return at the end of the
-        # line, so subsequent lines will overwrite them.
-        #
-        # If the previous result was longer than this one, we need to print
-        # some extra spaces to overwrite the previous result
-        overwrite_chars = ' ' * (num_chars_printed - len(transcript))
-
-        if False:
-            sys.stdout.write(transcript + overwrite_chars + '\r')
-            sys.stdout.flush()
-
-            num_chars_printed = len(transcript)
-
-        else:
-            #print(transcript + overwrite_chars)
-
-            # Exit recognition if any of the transcribed phrases could be
-            # one of our keywords.
-            if re.search(r'\b(exit|quit)\b', transcript, re.I):
-                print('Exiting..')
-                break
-            num_chars_printed = 0
-
 '''def word_chunky_thing(input_thing):
     global last_time
     end = time.time()
@@ -174,7 +124,7 @@ def listen_print_loop(responses): #unused
 
 wpm_difference_list = [54, 45, 45,45 ,34, 23,42]
 
-def word_chunky_thingalt():
+def wpm_calc():
     global last_time, realtime_wpm, wpm_difference_list, start
     end = time.time()
     beg = last_time
@@ -205,14 +155,16 @@ def get_word_number():
     return round(wordno_store)
 
 
-def process_chunk(chunk_text):
-    global wpm_current, current_word_number
+def process_finalised_chunk(chunk_text):
+    global wpm_current, current_word_number, current_word_number_temporary_offset
     #print ("SCREAMMMMM!MM!M!M!M!M!!M")
     thing = chunk_text
 
     #athing(chunk_text)
-
+    current_word_number_temporary_offset = 0
     current_word_number += len(chunk_text.split(' '))
+    current_word_number -= 1
+    print (current_word_number)
     #wpm_current = word_chunky_thing(thing)
 
 
@@ -244,8 +196,8 @@ def apply_corrections(uncorrected_string, corrections):
 
 def gen_corrections(only_last, uncorrected_string):
     global transcript_corrections, expected_word, current_word_number_temporary_offset
-    if not only_last:
-        current_word_number_temporary_offset = -1 #-1?
+    #if not only_last:
+        #current_word_number_temporary_offset = -1 #-1?
     words = uncorrected_string.split(' ')
     if only_last:
         words_to_check = [len(words)-1]
@@ -282,7 +234,7 @@ def set_expected_word():
 
 def flush_unsure():
     global transcript_corrections, transcript_pending, transcript_full
-    process_chunk(transcript_pending)
+    process_finalised_chunk(transcript_pending)
     transcript_full += apply_corrections(transcript_pending, transcript_corrections)
     transcript_corrections = []
 
@@ -343,14 +295,14 @@ def main():
                     if cur_response.results[0].is_final:
                         transcript_corrections = []
                         gen_corrections(False, cur_text)
-                        process_chunk(cur_text)
+                        process_finalised_chunk(cur_text)
                         transcript_full += apply_corrections(cur_text, transcript_corrections)
                         transcript_corrections = []
                         #transcript_full+=str(cur_text)
                     else:
                         #autocorrect based on script
                         gen_corrections(True, cur_text)
-                        word_chunky_thingalt()
+                        wpm_calc()
                         current_word_number_temporary_offset += 1
                         #print (current_word_number_temporary_offset)
                         transcript_pending = apply_corrections(cur_text, transcript_corrections)

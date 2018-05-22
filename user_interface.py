@@ -28,7 +28,7 @@ COLOR_GOOD = "#15955f" # Green
 COLOR_WARN = "#c9bb00" # Yellow
 COLOR_BAD = "#ab0000" # Red
 
-
+frame_count=0 #DELME
 
 MINWPM = 0
 
@@ -96,13 +96,15 @@ class Window(Frame):
             self.text.tag_remove("0.0", tag_ref)
 
         tag_ref = "{}.{}".format(line_no, char_no)
-        print (tag_ref) #DELME
+        #print (word_no) #DELME
         #print (tag_ref)
         self.text.tag_add("BOLD", "0.0", tag_ref)
         #self.text.tag_remove("BOLD", str(k)+"."+str(j+5))
 
 
     def update(self, position, wpm, volume):
+        global frame_count
+        frame_count+=1
         # return None
         # print("Current wpm: {}".format(wpm))
         optimal_wpm = (MAXWPM + MINWPM)/2
@@ -122,7 +124,7 @@ class Window(Frame):
         # print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
         self.past_wpm.append(wpm)
         # self.past_volume.append(volume)
-        self.pace_value['text'] = ""#'{} WPM'.format(int(wpm))
+        self.pace_value['text'] = frame_count#'{} WPM'.format(int(wpm))
 
         self.wpm_average_history.append(float(sum(self.past_wpm[-3:-1]))/len(self.past_wpm[-3:-1]))
         plot.save_plot(self.wpm_average_history[-10:-1], 'pace_graph.png', MAXWPM/  2.0, MINWPM, MAXWPM)
