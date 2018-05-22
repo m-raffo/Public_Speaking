@@ -348,7 +348,9 @@ class Window(Frame):
 
         self.past_wpm = [10, 10, 10, 10,10,10,10,10,10,10,10,10,10,10,10,10,10]
         self.wpm_average_history = [10, 10, 10, 10,10,10,10,10,10,10,10,10,10,10,10,10,10]
+
         self.past_volume = [150,150,150]
+        self.volume_average_history = [150, 150, 150, 150]
 
         # self.update(0, 150, 150)
 
