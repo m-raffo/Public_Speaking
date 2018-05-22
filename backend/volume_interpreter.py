@@ -1,8 +1,9 @@
 import pyaudio
 import wave
 import audioop
+import time
 
-CHUNK = 1024
+CHUNK = int(1024 / 2)
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
@@ -17,11 +18,16 @@ stream = p.open(format=FORMAT,
                 input=True,
                 frames_per_buffer=CHUNK)
 
-for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+
+def get_volume():
+    t1 = time.time()
     data = stream.read(CHUNK)
     rms = audioop.rms(data, 2)    # here's where you calculate the volume
+    t2 = time.time()
+    print("Time: " + str(t2-t1))
     print(rms)
 
-stream.stop_stream()
-stream.close()
-p.terminate()
+def end_volume():
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
