@@ -13,8 +13,8 @@ from backend import realtime_interpreter
 # os.system("python3 plot.py 0 150 300 234,200,197,160,140 pace_graph.png 140")
 # os.system("python3 plot.py 0 150 300 20,40,100,250,100,140,120 volume_graph.png 120")
 
-badglob = "0.0"
-bagblobooler = False
+tag_ref = "0.0"
+tag_ref_exists = False
 
 WINDOW_BG = "#ffffff"
 TEXTBOX_BG = "#e9e9e9"
@@ -71,31 +71,34 @@ imagepath = 'sample chart.png'
 class Window(Frame):
     # The frame window for the program
     def bold_by_word_number(self, word_count):
-        global badglob, bagblobooler
-        '''line_count, word_count = self.get_index_by_word_number(speech, word_count)
-        # print(line_count, word_count)
-        line_count = line_count * 2 -1'''
-        ts = speech
-        ts = ts.split(' ')
-        tl = speech
-        tl = tl.split('\n')
-        ts[word_count]
-        j = 0
-        k = 1
-        for i in range(0,word_count):
-            j+=len(ts[i])+1
-            if '\n' in ts[i]:
-                #
-                k+=2
-                j=2
-                #print("NEWLINE")
-        if not bagblobooler:
-            bagblobooler = True
+        global tag_ref, tag_ref_exists
+
+        line_no = 1 #this starts at one for some reason, gets booped later
+        word_no = 0 #this is used to count
+        char_no = 0 #this is used for the output thing
+
+        for line in speech_by_paragraph:
+            char_no = 0
+            for word in line:
+                word_no += 1
+                char_no += len(word)+1
+                if word_no >= word_count:
+                    break
+            if word_no >= word_count:
+                break
+            line_no += 2 #Lines per line
+
+
+
+        if not tag_ref_exists:
+            tag_ref_exists = True
         else:
-            self.text.tag_remove("0.0", badglob)
-        badglob = str(k)+"."+str(j+10)
-        #print (badglob)
-        self.text.tag_add("BOLD", "0.0", str(k)+"."+str(j+10))
+            self.text.tag_remove("0.0", tag_ref)
+
+        tag_ref = "{}.{}".format(line_no, char_no)
+        print (tag_ref) #DELME
+        #print (tag_ref)
+        self.text.tag_add("BOLD", "0.0", tag_ref)
         #self.text.tag_remove("BOLD", str(k)+"."+str(j+5))
 
 
@@ -179,7 +182,7 @@ class Window(Frame):
 
         # Update by word number
         #print("hi____"+str(num_words))
-        # self.bold_by_word_number(num_words)
+        self.bold_by_word_number(num_words)
         # self.text.yview_moveto(0.5)
 
 
@@ -222,6 +225,8 @@ class Window(Frame):
 
         # Bold font
         self.bold_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="bold")
+        #self.red_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="bold")
+
 
 
 
