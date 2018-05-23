@@ -29,7 +29,8 @@ COLOR_WARN = "#c9bb00" # Yellow
 COLOR_BAD = "#ab0000" # Red
 
 frame_count=0 #DELME
-enable_graphing=False
+fps_on = False
+enable_graphing= True
 
 MINWPM = 0
 
@@ -104,8 +105,9 @@ class Window(Frame):
 
 
     def update(self, position, wpm, volume):
-        global frame_count
-        frame_count+=1
+        if fps_on:
+            global frame_count
+            frame_count+=1
         # return None
         # print("Current wpm: {}".format(wpm))
         optimal_wpm = (MAXWPM + MINWPM)/2
@@ -126,7 +128,8 @@ class Window(Frame):
         if enable_graphing:
             self.past_wpm.append(wpm)
         # self.past_volume.append(volume)
-        self.pace_value['text'] = frame_count#'{} WPM'.format(int(wpm))
+        if fps_on:
+            self.pace_value['text'] = frame_count#'{} WPM'.format(int(wpm))
 
         if enable_graphing:
             self.wpm_average_history.append(float(sum(self.past_wpm[-3:-1]))/len(self.past_wpm[-3:-1]))
