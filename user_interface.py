@@ -71,10 +71,8 @@ imagepath = 'sample chart.png'
 
 
 class Window(Frame):
-    # The frame window for the program
-    def bold_by_word_number(self, word_count):
-        global tag_ref, tag_ref_exists
-
+    # Find tkinter index by word index in whole
+    def get_index_by_word_number(self, word_count):
         line_no = 1 #this starts at one for some reason, gets booped later
         word_no = 0 #this is used to count
         char_no = 0 #this is used for the output thing
@@ -90,41 +88,42 @@ class Window(Frame):
                 break
             line_no += 2 #Lines per line
 
+        return "{}.{}".format(line_no, char_no)
 
+
+
+    # The frame window for the program
+    def bold_by_word_number(self, word_count):
+        global tag_ref, tag_ref_exists
 
         if not tag_ref_exists:
             tag_ref_exists = True
         else:
             self.text.tag_remove("0.0", tag_ref)
 
-        tag_ref = "{}.{}".format(line_no, char_no)
-        #print (word_no) #DELME
-        #print (tag_ref)
+        tag_ref = self.get_index_by_word_number(word_count)
         self.text.tag_add("BOLD", "0.0", tag_ref)
-        #self.text.tag_remove("BOLD", str(k)+"."+str(j+5))
+
+    # The frame window for the program
+    def highlight_by_word_number(self, word_count):
+        tag_start = self.get_index_by_word_number(word_count)
+        tag_end = self.get_index_by_word_number(word_count+1)
+        self.text.tag_add("CORRECTION", tag_start, tag_end)
 
 
     def update(self, position, wpm, volume):
         if fps_on:
             global frame_count
             frame_count+=1
-        # return None
-        # print("Current wpm: {}".format(wpm))
+
         optimal_wpm = (MAXWPM + MINWPM)/2
         wpm = realtime_interpreter.get_wpm() #grab wpm value
-        #process wpm value
-        '''wpm -= optimal_wpm
-        wpm *= 0.2
-        if wpm > 0:
-            wpm = abs(wpm ** 1.5)
-        else:
-            wpm = -abs(wpm ** 1.5)
 
-        wpm += optimal_wpm'''
         wpm = clamp(MAXWPM - wpm, MINWPM, MAXWPM) #clamp it
         # print("Updating...")
         # print("Current wpm (clamped): {}".format(wpm))
         # print("Running average WPM: {}".format(float(sum(self.past_wpm[-6:-1]))/len(self.past_wpm[-6:-1])))
+
         if enable_graphing:
             self.past_wpm.append(wpm)
         # self.past_volume.append(volume)
@@ -134,9 +133,8 @@ class Window(Frame):
         if enable_graphing:
             self.wpm_average_history.append(float(sum(self.past_wpm[-3:-1]))/len(self.past_wpm[-3:-1]))
             plot.save_plot(self.wpm_average_history[-10:-1], 'pace_graph.png', MAXWPM/  2.0, MINWPM, MAXWPM)
-        # plot.save_plot(self.past_wpm, 'volume_graph.png', 5, 0, 10)
 
-        # self.scrollb.set(.1, 0.8)
+        # self.scrollb.set(.1, 0.8) #SET SCROLL
 
         wpm_settings = plot.get_wpm_settings_outside(MAXWPM / 2.0, MINWPM, MAXWPM)
         #print(wpm_settings)
@@ -174,11 +172,7 @@ class Window(Frame):
             self.speed_tip.config(fg='black')
         # self.text.see(1)
         # print(self.scrollb.get())
-
-
         # os.system("python3 plot.py 0 150 300 {} volume_graph.png 140".format(str.join(',',past_wpm_str)))
-
-#
         # print("Done computing...")
 
         img2 = ImageTk.PhotoImage(Image.open("pace_graph.png"))
@@ -191,26 +185,16 @@ class Window(Frame):
         # Update by word number
         #print("hi____"+str(num_words))
         self.bold_by_word_number(num_words)
+        variations = realtime_interpreter.get_variations()
+        for variation in variations:
+            self.highlight_by_word_number(variation.expected_index)
+            #print (variation.expected_index)
         # self.text.yview_moveto(0.5)
 
 
         # img2 = ImageTk.PhotoImage(Image.open("volume_graph.png"))
         # self.Artwork1.configure(image=img2)
         # self.Artwork1.image = img2
-
-    def get_index_by_word_number(self,speech, word_count):
-        current_found = 0
-        count = 0
-        speechtemp = speech;
-        speechtemp.replace('\n',' ')
-        for i in speechtemp:
-            count += 1
-            if len(i) + current_found  > word_count:
-                return count, word_count - current_found
-            else:
-                current_found += len(i)
-
-
 
 
 
@@ -233,7 +217,7 @@ class Window(Frame):
 
         # Bold font
         self.bold_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="bold")
-        #self.red_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="bold")
+        self.correction_font = Font(family=DEFAULT_FONT, size=DEFAULT_FONT_SIZE, weight="normal")
 
 
 
@@ -253,6 +237,8 @@ class Window(Frame):
 
         self.text.pack(fill= BOTH)
         self.text.tag_configure("BOLD", font=self.bold_font, foreground='#000000')
+        self.text.tag_configure("CORRECTION", font=self.correction_font, foreground='#FF0F0F')
+
         self.text.configure(state='normal')
         self.text.insert(END, speech)
         self.text.config(state=DISABLED)
